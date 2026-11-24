@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: gravity-gtm
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /healthz
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: GRAVITY_MODEL
+        value: claude-opus-5-5
+      - key: FLEXPRICE_API_KEY
+        sync: false
+      - key: FLEXPRICE_BASE_URL
+        value: https://us.api.flexprice.io/v1
+      - key: BAND_API_KEY
+        sync: false
+      - key: HUNTER_API_KEY
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: TEST_INBOX
+        sync: false
+      - key: NEXLA_WEBHOOK_URL
+        sync: false
+      - key: DISPATCH_MODE
+        value: sandbox

@@ -1,0 +1,16 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  build-and-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm install
+      - run: npm run build
+      - name: Boot server (demo mode) and run end-to-end smoke test
+        run: |
+          node server/index.js &
+          for i in $(seq 1 30); do curl -sf localhost:8787/healthz && break; sleep 1; done
+          node scripts/smoke.js http://localhost:8787 --fresh

@@ -1,0 +1,29 @@
+name: snyk
+on: [push, pull_request]
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    permissions: { security-events: write, actions: read, contents: read }
+    steps:
+      - uses: actions/checkout@v4
+      - name: Snyk SCA (open-source dependencies)
+        uses: snyk/actions/node@master
+        continue-on-error: true
+        env: { SNYK_TOKEN: "${{ secrets.SNYK_TOKEN }}" }
+        with:
+          args: --all-projects --severity-threshold=high --sarif-file-output=snyk.sarif
+      - name: Snyk Code (SAST)
+        uses: snyk/actions/node@master
+        continue-on-error: true
+        env: { SNYK_TOKEN: "${{ secrets.SNYK_TOKEN }}" }
+        with:
+          command: code test
+          args: --sarif-file-output=snyk-code.sarif
+      - name: Upload SCA results
+        if: hashFiles('snyk.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with: { sarif_file: snyk.sarif, category: snyk-sca }
+      - name: Upload SAST results
+        if: hashFiles('snyk-code.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with: { sarif_file: snyk-code.sarif, category: snyk-code }
