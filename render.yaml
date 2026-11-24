@@ -29,5 +29,9 @@ services:
         sync: false
       - key: NEXLA_WEBHOOK_URL
         sync: false
+      - key: MOSS_PROJECT_ID
+        sync: false
+      - key: MOSS_PROJECT_KEY
+        sync: false
       - key: DISPATCH_MODE
         value: sandbox

@@ -10,6 +10,7 @@
 [![Snyk](https://github.com/vnmoorthy/gravity-gtm/actions/workflows/snyk.yml/badge.svg)](https://github.com/vnmoorthy/gravity-gtm/actions/workflows/snyk.yml)
 ![Claude](https://img.shields.io/badge/Claude-opus--5--5-f59e0b?logo=anthropic&logoColor=white)
 ![Band](https://img.shields.io/badge/Band-multi--agent-8b5cf6)
+![Moss](https://img.shields.io/badge/Moss-semantic%20search-2f5bea)
 ![Flexprice](https://img.shields.io/badge/Flexprice-metered-84cc16)
 ![Render](https://img.shields.io/badge/Render-deployed-46E3B7?logo=render&logoColor=white)
 ![License: MIT](https://img.shields.io/badge/license-MIT-white)
@@ -56,6 +57,7 @@ Gravity is the opposite of a black box. **Every claim is cited, every contact is
 | 12 | **Kanban pipeline** | Matched → Contacted → Replied → Meeting → Closed/Lost. Drag-and-drop, **AI vs Rep attribution** on every card, timeline drawer, full timestamped audit log. |
 | 13 | **Analytics** | Funnel, conversion by industry and tier, **A/B variant predicted vs observed**, attribution donut, AI $ spend, **cost per lead and per meeting**. |
 | 14 | **Agent War Room (Band)** | 11 agents coordinate via @mentions with per-agent token, search and $ telemetry. HITL decisions can be made in the UI **or from a Band room**. The command bar lets you say "@Scout find 4 more". |
+| 16 | **Ask Gravity + lookalikes (Moss)** | ⌘K natural-language search across accounts, buyers, signals and competitors using Moss sub-10 ms hybrid (semantic + keyword) retrieval. Moss also powers lookalike accounts, Reviewer evidence retrieval per draft, and Writer grounding (persona pains → most relevant signals). A local hybrid fallback runs when no keys are set. |
 | 15 | **Spend Governor (Flexprice)** | Every billable action is credit-checked, debited and streamed to Flexprice as a usage event. Out of credits means **HTTP 402 and a paused pipeline**, with a war-room alert and a one-click top-up. |
 
 ## Screenshots
@@ -71,6 +73,8 @@ Gravity is the opposite of a black box. **Every claim is cited, every contact is
 | ![](assets/screens/pipeline.png) | ![](assets/screens/analytics.png) |
 | **Spend Governor (Flexprice)** | **Competitor map** |
 | ![](assets/screens/billing.png) | ![](assets/screens/competitors.png) |
+| **Ask Gravity (Moss ⌘K search)** | |
+| ![](assets/screens/ask-moss.png) | |
 
 ## Architecture
 
@@ -101,6 +105,7 @@ Deep dive, covering query logic, graph ontology, reasoning loops, scoring, the t
 |---|---|---|
 | **Band** | The war room is mirrored into a real Band chat room through Band's agent REST API (`/agent/chats/{id}/events` for steps, `/messages` with @mentions for HITL). Humans reply `approve` / `reject` in Band and Gravity resolves the decision. | Agent War Room header "Mirrored to Band room…"; HITL decisions |
 | **Flexprice** | `icp_inference`, `account_discovered`, `lead_enriched`, `outreach_generated`, `outreach_sent`, `graph_query` and `signal_refresh` are streamed to `POST /v1/events` (idempotent `event_id`). Customer and wallet are created on boot. A credit gate blocks spend with 402, and top-up calls `/wallets/{id}/top-up`. | Credit meter in the top bar, Spend Governor page, "Simulate low balance" demo |
+| **Moss** | Every account, buyer, signal and competitor is indexed with `@moss-js/moss` (`createIndex` / `addDocs` upsert / `loadIndex` / `query` with hybrid `alpha`). It serves the ⌘K Ask bar, lookalike accounts, Reviewer evidence and Writer grounding, and each query is metered as `semantic_query` in Flexprice. | ⌘K Ask bar (engine badge "Moss · Xms"), "Find lookalikes" on Accounts, "Evidence retrieved" in HITL Review |
 | **Render** | `render.yaml` blueprint: Node web service, `/healthz` health check, secrets via `sync:false`. | Live demo URL |
 | **Snyk** | SCA (`snyk test`) and SAST (`snyk code test`) on every push, with SARIF uploaded to GitHub code scanning. Sentinel brings the same mindset to runtime: outbound links, PII and injection. | Snyk badge / Actions tab |
 | **Nexla** | Approved sends, meetings and lead batches are streamed to a Nexla webhook source and become Nexsets that flow into any CRM or warehouse. | "Push to Nexla" on Accounts |

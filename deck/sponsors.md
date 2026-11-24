@@ -33,3 +33,9 @@ Gravity is a self-driving GTM engine: one sentence in, booked meetings out. Ever
 - [ ] Nexla flow receives a test record from **Push to Nexla**.
 - [ ] (Optional) Neo4j AuraDB is connected, `POST /api/graph/sync-neo4j` returns `synced: true`, and the legend shows "Neo4j (synced)".
 - [ ] `DISPATCH_MODE=sandbox` and `TEST_INBOX` point at your own inbox.
+
+
+## Moss (moss.dev): semantic search runtime
+- **How it's used:** Gravity indexes every account, buyer, signal and competitor into a Moss index (`@moss-js/moss`: `createIndex`, `addDocs` with upsert, `loadIndex`, `query` with hybrid `alpha`). Moss serves the **⌘K Ask Gravity** bar, **Find lookalikes** on Accounts, **Reviewer evidence retrieval** (each draft is matched to its most relevant cited signals), and **Writer grounding** (persona pains are matched to signals before drafting). Every query is metered as `semantic_query` in Flexprice.
+- **Env:** `MOSS_PROJECT_ID`, `MOSS_PROJECT_KEY` (optional `MOSS_INDEX`, `MOSS_MODEL=moss-minilm`). Without keys, a local hybrid engine (BM25 + trigram cosine) keeps every feature working, and the UI badge reads "Moss · local fallback".
+- **Demo moment:** press ⌘K and type "CFOs hiring after a Series C". Ranked results appear in a few ms with the engine badge. Then open an account, click **Find lookalikes**, and in HITL Review point at "Evidence retrieved · Moss".
