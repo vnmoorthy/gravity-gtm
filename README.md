@@ -20,6 +20,8 @@
 
 ---
 
+<div align="center"><img src="assets/demo.gif" alt="Warm-intro path lighting up in the 3D knowledge graph" width="100%"/><br/><sub>Multi-hop reasoning live: a warm-intro path (you → ex-employer → buyer) lights up, then a competitor-displacement play.</sub></div>
+
 ## Why Gravity exists
 
 Founders and small sales teams run go-to-market across five disconnected tools: an ICP slide deck, ad-hoc Google searches, an enrichment vendor, a mail client and a spreadsheet CRM. Context dies at every hand-off. The "AI SDRs" that promise to fix it make things worse:
