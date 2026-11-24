@@ -22,6 +22,8 @@ export default function Graph({ state, graphVersion, go }) {
   const [sel, setSel] = useState(null);
   const [result, setResult] = useState(null);
   const [hl, setHl] = useState({ nodes: new Set(), links: new Set() });
+  const hlRef = useRef(false);
+  useEffect(() => { hlRef.current = hl.nodes.size > 0; }, [hl]);
   const [busy, run] = useAction();
 
   useEffect(() => {
@@ -36,12 +38,16 @@ export default function Graph({ state, graphVersion, go }) {
 
   useEffect(() => {
     const ro = new ResizeObserver(([e]) => setSize({ w: e.contentRect.width, h: e.contentRect.height }));
-    if (wrap.current) ro.observe(wrap.current);
+    if (wrap.current) { ro.observe(wrap.current); setSize({ w: wrap.current.clientWidth, h: wrap.current.clientHeight }); }
     return () => ro.disconnect();
-  }, []);
+  }, [data.nodes.length > 0]);
 
   const bloomed = useRef(false);
   const fitted = useRef(false);
+  useEffect(() => {
+    const t = setTimeout(() => { if (!hlRef.current) fg.current?.zoomToFit(700, 30); }, 400);
+    return () => clearTimeout(t);
+  }, [size.w, size.h, data.nodes.length]);
 
   useEffect(() => {
     const f = fg.current;
@@ -128,7 +134,7 @@ export default function Graph({ state, graphVersion, go }) {
         onNodeClick={(n) => setSel(n)}
         enableNodeDrag={false}
         cooldownTicks={120}
-        onEngineStop={() => { if (!hl.nodes.size && !fitted.current) { fg.current?.zoomToFit(900, 60); fitted.current = true; } }}
+        onEngineStop={() => { if (!hlRef.current && !fitted.current) { fg.current?.zoomToFit(900, 30); fitted.current = true; } }}
         warmupTicks={20}
       />
 
