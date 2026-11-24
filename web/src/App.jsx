@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { Rocket, Target, Network, Building2, Swords, MailCheck, KanbanSquare, BarChart3, Users2, CreditCard, PanelRightClose, PanelRightOpen, Sparkles, Zap, Radio } from "lucide-react";
-import { useWorkspace, fmt } from "./api";
+import { Rocket, Target, Network, Building2, Swords, MailCheck, KanbanSquare, BarChart3, Users2, CreditCard, PanelRightClose, PanelRightOpen, Sparkles, Zap, Radio, Search } from "lucide-react";
+import { useWorkspace, fmt, api } from "./api";
 import { ToastProvider, cx, Md } from "./ui";
 import Mission from "./views/Mission";
 import ICP from "./views/ICP";
@@ -64,6 +64,52 @@ function CreditMeter({ billing, onClick }) {
       </div>
       <div className="w-14 h-1.5 rounded-full bg-white/10 overflow-hidden"><div className={cx("h-full rounded-full", low ? "bg-rose-400" : "bg-lime-400")} style={{ width: `${Math.max(2, pct * 100)}%`, transition: "width .6s" }} /></div>
     </button>
+  );
+}
+
+const TYPE_COLOR = { account: "#7c3aed", person: "#0891b2", signal: "#65a30d", competitor: "#e11d48" };
+function AskBar({ go, moss }) {
+  const [q, setQ] = useState("");
+  const [r, setR] = useState(null);
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  const timer = useRef(null);
+  useEffect(() => {
+    const k = (e) => { if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); ref.current?.focus(); setOpen(true); } if (e.key === "Escape") setOpen(false); };
+    window.addEventListener("keydown", k);
+    return () => window.removeEventListener("keydown", k);
+  }, []);
+  const run = (v) => {
+    setQ(v); setOpen(true);
+    clearTimeout(timer.current);
+    if (!v.trim()) return setR(null);
+    timer.current = setTimeout(() => api(`/api/search?q=${encodeURIComponent(v)}`).then(setR).catch(() => setR({ results: [], error: true })), 220);
+  };
+  const pick = (d) => { const t = d.metadata?.type; go(t === "person" ? "outreach" : t === "competitor" ? "competitors" : "accounts"); setOpen(false); };
+  return (
+    <div className="relative w-[360px]">
+      <div className="flex items-center gap-2 h-9 px-3 rounded-md border border-[#e2e0da] bg-[#ffffff]">
+        <Search className="size-4 text-zinc-500" />
+        <input ref={ref} value={q} onChange={(e) => run(e.target.value)} onFocus={() => setOpen(true)} onBlur={() => setTimeout(() => setOpen(false), 180)} placeholder="Ask Gravity… e.g. “CFOs hiring after a Series C”" className="flex-1 bg-transparent text-[13px] outline-none placeholder:text-zinc-600" />
+        <span className="text-[10px] text-zinc-500 border border-[#e2e0da] rounded px-1">⌘K</span>
+      </div>
+      {open && r && (
+        <div className="absolute top-11 left-0 w-[520px] glass rounded-xl p-2 z-50 fade-in max-h-[460px] overflow-y-auto">
+          <div className="flex items-center justify-between px-2 py-1 text-[10px] uppercase tracking-wider text-zinc-500">
+            <span>{r.results?.length || 0} results · hybrid semantic + keyword</span>
+            <span className={cx("px-1.5 py-0.5 rounded", r.engine === "moss" ? "bg-[#2f5bea] !text-[#ffffff]" : "bg-white/[0.06]")}>{r.engine === "moss" ? "Moss" : "Moss · local fallback"} · {r.ms}ms</span>
+          </div>
+          {(r.results || []).map((d) => (
+            <button key={d.id} onMouseDown={() => pick(d)} className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-white/[0.04] flex gap-2.5">
+              <span className="text-[10px] uppercase tracking-wider mt-0.5 w-16 shrink-0" style={{ color: TYPE_COLOR[d.metadata?.type] }}>{d.metadata?.type}</span>
+              <span className="text-[12.5px] text-zinc-300 flex-1 line-clamp-2">{d.text}</span>
+              <span className="text-[10px] font-mono text-zinc-500">{(d.score || 0).toFixed(2)}</span>
+            </button>
+          ))}
+          {!r.results?.length && <div className="text-xs text-zinc-500 px-2 py-3">No matches yet. Launch a mission to populate the index.</div>}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -136,8 +182,8 @@ export default function App() {
             })}
           </div>
           <div className="p-3 border-t border-white/5 space-y-1.5 text-[11px]">
-            {[["Claude", integ.claude], ["Flexprice", integ.flexprice?.enabled], ["Band", integ.band?.enabled], ["Neo4j", integ.neo4j], ["Hunter", integ.hunter], ["Email", Boolean(integ.email?.provider)], ["Nexla", integ.nexla], ["Snyk CI", true]].map(([k, v]) => (
-              <div key={k} className="flex items-center justify-between text-zinc-500"><span>{k}</span><span className={cx("flex items-center gap-1.5", v ? "text-emerald-400" : "text-zinc-600")}><span className={cx("size-1.5 rounded-full", v ? "bg-emerald-400" : "bg-zinc-600")} />{v ? "live" : k === "Neo4j" ? "built-in" : "demo"}</span></div>
+            {[["Claude", integ.claude], ["Moss", integ.moss?.engine === "moss"], ["Flexprice", integ.flexprice?.enabled], ["Band", integ.band?.enabled], ["Neo4j", integ.neo4j], ["Hunter", integ.hunter], ["Email", Boolean(integ.email?.provider)], ["Nexla", integ.nexla], ["Snyk CI", true]].map(([k, v]) => (
+              <div key={k} className="flex items-center justify-between text-zinc-500"><span>{k}</span><span className={cx("flex items-center gap-1.5", v ? "text-emerald-400" : "text-zinc-600")}><span className={cx("size-1.5 rounded-full", v ? "bg-emerald-400" : "bg-zinc-600")} />{v ? "live" : k === "Neo4j" || k === "Moss" ? "built-in" : "demo"}</span></div>
             ))}
           </div>
         </nav>
@@ -146,7 +192,7 @@ export default function App() {
           <header className="h-14 shrink-0 border-b border-white/5 flex items-center justify-between px-5 gap-4 bg-ink-900/40">
             <div className="flex items-center gap-4 min-w-0">
               <span className={cx("text-[10px] font-semibold tracking-wider px-2 py-1 rounded-md border", integ.mode === "live" ? "border-emerald-500/40 text-emerald-300 bg-emerald-500/10" : "border-[#e2e0da] text-zinc-400 bg-[#ffffff]")}>{integ.mode === "live" ? "● LIVE" : "◐ DEMO DATA"}</span>
-              {state?.product && <span className="text-sm text-zinc-300 truncate">Mission: <span className="text-white font-medium">{state.product.name}</span></span>}
+              <AskBar go={setView} moss={integ.moss} />
               <RunTracker run={state?.run} />
             </div>
             <div className="flex items-center gap-2.5">

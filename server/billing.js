@@ -10,6 +10,7 @@ export const METERS = {
   outreach_sent: { credits: 2, label: "Outreach sent", unit: "message" },
   graph_query: { credits: 1, label: "Graph queries evaluated", unit: "query" },
   signal_refresh: { credits: 2, label: "Signal refresh", unit: "account" },
+  semantic_query: { credits: 0.5, label: "Moss semantic queries", unit: "query" },
 };
 
 const FP_BASE = () => (process.env.FLEXPRICE_BASE_URL || "https://us.api.flexprice.io/v1").replace(/\/$/, "");

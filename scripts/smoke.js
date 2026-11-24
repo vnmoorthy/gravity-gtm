@@ -67,6 +67,12 @@ const state = async () => (await call("/api/state")).j;
   const tu = await call("/api/billing/topup", { credits: 300 });
   check("top up", tu.j.balance >= 300);
 
+  const sr = await call("/api/search?q=" + encodeURIComponent("CFO hiring after funding"));
+  check("Moss semantic search", sr.status === 200 && sr.j.results?.length > 0, `${sr.j.engine} · ${sr.j.ms}ms · top: ${sr.j.results?.[0]?.metadata?.type}`);
+  const la = await call(`/api/accounts/${live[0].id}/lookalikes`);
+  check("Moss lookalikes", la.status === 200 && Array.isArray(la.j.results), `${la.j.results?.length} similar to ${la.j.seed}`);
+  s = await state();
+  check("Reviewer evidence retrieved", s.messages.some((m) => m.evidence?.docs?.length), s.messages.find((m) => m.evidence)?.evidence?.engine);
   const cmd = await call("/api/command", { text: "@Scout radar" });
   check("war-room command", cmd.status === 200, cmd.j.reply);
   await sleep(1500);

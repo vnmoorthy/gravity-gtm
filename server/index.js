@@ -12,6 +12,7 @@ import { ensureBilling, initFlexprice, topUp, setBalance, meter, METERS, flexpri
 import { buildGraph, QUERIES, initNeo4j, neo4jConnected, syncNeo4j } from "./graph.js";
 import { sendEmail, pushToNexla, dispatchMode, emailProvider } from "./dispatch.js";
 import * as P from "./pipeline.js";
+import { search as mossSearch, lookalikes, syncIndex, status as mossStatus, mossEnabled } from "./moss.js";
 
 load();
 ensureBilling();
@@ -50,6 +51,7 @@ function integrations() {
     email: { provider: emailProvider(), mode: dispatchMode(), testInbox: Boolean(process.env.TEST_INBOX) },
     nexla: Boolean(process.env.NEXLA_WEBHOOK_URL),
     snyk: true,
+    moss: mossStatus(),
     render: Boolean(process.env.RENDER || process.env.RENDER_SERVICE_ID),
   };
 }
@@ -111,6 +113,22 @@ app.post("/api/discover", wrap(async (req) => { guardRun(); return await P.disco
 app.post("/api/enrich", wrap(async () => await P.enrichAll()));
 app.post("/api/outreach", wrap(async () => await P.writeOutreach()));
 app.post("/api/signals/refresh", wrap(async () => await P.refreshSignals()));
+
+// ─── Moss semantic search
+app.get("/api/search", wrap(async (req) => {
+  const q = String(req.query.q || "").trim();
+  if (!q) return { q, results: [], engine: mossStatus().engine, ms: 0 };
+  await meter("semantic_query", 1, { q: q.slice(0, 60) });
+  const r = await mossSearch(q, { topK: Number(req.query.k) || 8, type: req.query.type || undefined, alpha: req.query.alpha !== undefined ? Number(req.query.alpha) : undefined });
+  return r;
+}));
+app.get("/api/accounts/:id/lookalikes", wrap(async (req) => {
+  await meter("semantic_query", 1, { lookalikes: req.params.id });
+  const r = await lookalikes(req.params.id);
+  say("cartographer", `Moss lookalikes for ${r.seed}: ${r.results.map((x) => x.metadata?.name).join(", ") || "none"} (${r.ms}ms, ${r.engine}).`, { kind: "result" });
+  return r;
+}));
+app.post("/api/moss/sync", wrap(async () => await syncIndex()));
 
 // ─── Graph
 app.get("/api/graph", (req, res) => res.json(buildGraph()));
@@ -374,5 +392,5 @@ if (fs.existsSync(dist)) {
 const PORT = process.env.PORT || 8787;
 app.listen(PORT, async () => {
   console.log(`Gravity GTM on :${PORT} · mode=${hasLLM() ? "live" : "demo"} · model=${MODEL}`);
-  await Promise.allSettled([initFlexprice(), initBand(), initNeo4j()]);
+  await Promise.allSettled([initFlexprice(), initBand(), initNeo4j(), syncIndex()]);
 });

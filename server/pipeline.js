@@ -6,6 +6,7 @@ import { meter, CreditError } from "./billing.js";
 import { enrichPerson } from "./enrich.js";
 import { warmPaths, hiringToEvaluation, displacement } from "./graph.js";
 import * as demo from "./demo.js";
+import { search as mossSearch, scheduleSync, syncIndex } from "./moss.js";
 
 const clamp = (n, a = 0, b = 1) => Math.max(a, Math.min(b, Number(n) || 0));
 const host = (u = "") => { try { return new URL(u.startsWith("http") ? u : "https://" + u).hostname.replace(/^www\./, ""); } catch { return ""; } };
@@ -240,6 +241,7 @@ export async function graphPass() {
   try { await meter("graph_query", 3, { queries: "warm_paths,hiring_cycles,displacement" }); } catch { /* gated, non-fatal */ }
   say("cartographer", `Graph updated: ${state.accounts.filter((a) => a.status !== "filtered").length} companies · ${state.people.length} people · ${state.competitors.length} competitors. Multi-hop: ${wp.length} warm intro paths, ${hc.length} hiring→evaluation links, ${dp.length} displacement plays.`, { to: ["enricher", "writer"], kind: "result", data: { warm: wp.slice(0, 5), hiring: hc.slice(0, 5), displacement: dp.slice(0, 5) } });
   emit("graph", {});
+  scheduleSync(200);
   return { wp, hc, dp };
 }
 
@@ -290,6 +292,12 @@ export async function writeOutreach({ limit = 8 } = {}) {
     const chunk = leads.slice(i, i + conc);
     await Promise.all(chunk.map(async ({ p, a }) => {
       const { warm, disp, persona } = leadContext(p);
+      let grounded = [];
+      try {
+        const g = await mossSearch(`${(persona?.pains || []).join(" ")} ${state.product.description}`, { topK: 3, type: "signal", accountId: a.id });
+        grounded = g.results;
+        if (grounded.length) say("writer", `Moss ranked ${grounded.length} most-relevant signals for ${p.name} in ${g.ms}ms (${g.engine}).`, { kind: "thought" });
+      } catch { /* optional */ }
       let seq;
       if (!hasLLM()) { await sleep(400); seq = demo.sequence(state.product, p, a, warm, disp); }
       else {
@@ -300,7 +308,7 @@ export async function writeOutreach({ limit = 8 } = {}) {
 Seller: ${state.product.name} — ${state.product.description}
 Value props: ${(state.icp.value_props || []).join("; ")}
 Persona pains: ${(persona?.pains || []).join("; ")}
-VERIFIED SIGNALS about ${a.name} (only reference these, cite by index):
+${grounded.length ? `MOST RELEVANT TO THIS PERSONA (Moss-ranked): ${grounded.map((r) => r.text).join(" | ")}\n` : ""}VERIFIED SIGNALS about ${a.name} (only reference these, cite by index):
 ${a.signals.map((s, i) => `[${i}] (${s.type}, ${s.date || "recent"}) ${s.text} — ${s.source}`).join("\n")}
 ${warm ? `WARM PATH: ${warm.names.join(" → ")} (mention the shared connection naturally)` : ""}
 ${disp ? `They appear to use competitor ${disp.competitor}. Our edge: ${disp.edge}` : ""}
@@ -408,6 +416,7 @@ export async function reviewOne(m) {
   if (unsupported.length && m.twin) m.twin.reply_probability = Math.max(0.02, (m.twin.reply_probability || 0.2) * 0.4);
   m.security = securityScan(m);
   m.status = m.security.status === "blocked" ? "blocked" : "pending_review";
+  try { const ev = await mossSearch(`${m.subject} ${m.body}`, { topK: 3, accountId: m.accountId, type: "signal" }); m.evidence = { engine: ev.engine, ms: ev.ms, docs: ev.results.map((r) => ({ text: r.text, url: r.metadata?.url, score: r.score })) }; } catch { /* optional */ }
   say("reviewer", unsupported.length ? `🚩 Caught ${unsupported.length} unsupported claim(s) in the draft to ${p?.name}: “${unsupported[0].slice(0, 90)}”. Struck and sent back; Buyer Twin reply odds dropped to ${Math.round((m.twin?.reply_probability || 0) * 100)}%.` : `Draft to ${p?.name} passes: every claim is traceable.`, { to: unsupported.length ? ["writer", "human"] : [], kind: "review" });
   emit("messages", state.messages);
   save();
@@ -461,6 +470,7 @@ Return JSON: {"reviews":[{"id": str, "verdict": "pass|revise", "unsupported_clai
         m.twin = { reply_probability: clamp(v?.reply_probability ?? 0.18), objection: v?.objection || "Timing — not a priority this quarter", reply: v?.twin_reply || "" };
         m.security = securityScan(m);
         m.status = m.security.status === "blocked" ? "blocked" : "pending_review";
+        try { const ev = await mossSearch(`${m.subject} ${m.body}`, { topK: 3, accountId: m.accountId, type: "signal" }); m.evidence = { engine: ev.engine, ms: ev.ms, docs: ev.results.map((r) => ({ text: r.text, url: r.metadata?.url, score: r.score })) }; } catch { /* optional */ }
       }
     }));
     emit("messages", state.messages);
@@ -511,6 +521,7 @@ export async function refreshSignals({ limit = 3 } = {}) {
   emit("accounts", { accounts: state.accounts, people: state.people });
   emit("graph", {});
   say("scout", `Radar added ${added} new signals; scores re-ranked.`, { to: ["cartographer"], kind: "result" });
+  scheduleSync(100);
   save();
   return { added };
 }

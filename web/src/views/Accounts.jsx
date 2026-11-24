@@ -1,6 +1,7 @@
 import { useState, Fragment } from "react";
 import { Building2, Search, Sparkles, Radar, Download, Send, ChevronDown, ChevronRight, ShieldCheck, ShieldAlert, SquareUser as Linkedin, Mail, Server, Filter } from "lucide-react";
 import { api } from "../api";
+import { Copy as CopyIcon } from "lucide-react";
 import { Card, Button, Badge, Tier, Score, SourceChip, EmailStatus, Empty, SectionTitle, useAction, cx } from "../ui";
 
 export default function Accounts({ state, go }) {
@@ -8,6 +9,7 @@ export default function Accounts({ state, go }) {
   const [tab, setTab] = useState("all");
   const [q, setQ] = useState("");
   const [open, setOpen] = useState({});
+  const [look, setLook] = useState({});
   const accs = state.accounts
     .filter((a) => (tab === "filtered" ? a.status === "filtered" : a.status !== "filtered" && (tab === "all" || a.tier === tab)))
     .filter((a) => !q || (a.name + a.industry + a.hq).toLowerCase().includes(q.toLowerCase()))
@@ -114,6 +116,15 @@ export default function Accounts({ state, go }) {
                             <div className="label mt-4">Score breakdown</div>
                             <div className="text-sm text-zinc-400">Fit {a.fit_score} × 0.55 + Intent {a.intent_score} × 0.45 = <span className="text-white font-semibold">{a.score}</span></div>
                             {a.tools_used?.length > 0 && <><div className="label mt-4">Known tools</div><div className="flex gap-1 flex-wrap">{a.tools_used.map((t) => <Badge key={t}>{t}</Badge>)}</div></>}
+                            <div className="label mt-4">Lookalike accounts · Moss</div>
+                            <Button size="sm" icon={CopyIcon} loading={busy === "look" + a.id} onClick={(e) => { e.stopPropagation(); run("look" + a.id, async () => { const r = await api(`/api/accounts/${a.id}/lookalikes`); setLook({ ...look, [a.id]: r }); }); }}>Find lookalikes</Button>
+                            {look[a.id] && (
+                              <div className="mt-2 space-y-1">
+                                <div className="text-[10px] uppercase tracking-wider text-zinc-500">{look[a.id].engine === "moss" ? "Moss" : "Moss · local fallback"} · {look[a.id].ms}ms</div>
+                                {look[a.id].results.map((r) => <div key={r.id} className="text-xs flex items-center justify-between gap-2"><span className="text-zinc-300">{r.metadata?.name}</span><span className="font-mono text-zinc-500">{r.score.toFixed(2)}</span></div>)}
+                                {!look[a.id].results.length && <div className="text-xs text-zinc-500">No close matches yet.</div>}
+                              </div>
+                            )}
                           </div>
                         </div>
                       </td></tr>

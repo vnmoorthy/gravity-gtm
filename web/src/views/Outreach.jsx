@@ -67,6 +67,12 @@ function Message({ m, busy, run, best }) {
           <div className="text-zinc-500 mt-0.5">{m.review?.notes}</div>
           {unsupported.map((u, i) => <div key={i} className="text-rose-300 mt-0.5">✗ unsupported: “{u}”</div>)}
           <div className="flex flex-wrap gap-1 mt-1.5">{m.claims?.filter((c) => c.source).map((c, i) => <SourceChip key={i} url={c.source} />)}</div>
+          {m.evidence?.docs?.length > 0 && (
+            <div className="mt-2">
+              <div className="text-[10px] uppercase tracking-wider text-[#2f5bea]">Evidence retrieved · {m.evidence.engine === "moss" ? "Moss" : "Moss local"} · {m.evidence.ms}ms</div>
+              {m.evidence.docs.slice(0, 2).map((d, i) => <div key={i} className="text-[11px] text-zinc-500 mt-0.5 line-clamp-1">{d.score.toFixed(2)} · {d.text}</div>)}
+            </div>
+          )}
         </div>
         <div className="text-xs">
           <div className="flex items-center gap-1.5 font-medium text-teal-300"><Sparkles className="size-3.5" />Buyer Twin: {fmt.pct(m.twin?.reply_probability)} reply odds</div>
