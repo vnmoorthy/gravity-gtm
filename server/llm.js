@@ -39,7 +39,17 @@ export async function ask({ system, prompt, effort = "low", web = false, maxUses
   };
   if (web) params.tools = [{ type: "web_search_20260209", name: "web_search", max_uses: maxUses }];
 
-  let resp = await create(params);
+  let resp;
+  try {
+    resp = await create(params);
+  } catch (e) {
+    // Web search not enabled for this org / tool rejected → degrade to model knowledge (flagged unverified upstream)
+    if (web && e?.status === 400 && /web_search|tool|server_tool/i.test(String(e?.message))) {
+      delete params.tools;
+      resp = await create(params);
+      resp._noWeb = true;
+    } else throw e;
+  }
   let guard = 0;
   const all = [resp];
   while (resp.stop_reason === "pause_turn" && guard++ < 4) {
@@ -66,7 +76,7 @@ export async function ask({ system, prompt, effort = "low", web = false, maxUses
     }
   }
   const cost = (usage.in * PRICE.in + usage.out * PRICE.out) / 1e6 + usage.searches * PRICE.search;
-  return { text, json: extractJSON(text), sources: [...sources.values()], usage, cost };
+  return { text, json: extractJSON(text), sources: [...sources.values()], usage, cost, noWeb: Boolean(all[0]?._noWeb) };
 }
 
 export function extractJSON(text) {

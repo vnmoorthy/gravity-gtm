@@ -170,7 +170,7 @@ export async function discover(opts = {}) {
       tools_used: c.tools_used || [], negative: c.negative_signals || [], status: "qualified", discoveredAt: now(), discoveredBy: "ai", uses_competitors: [],
     };
     const neg = (a.negative || []).find((x) => /freeze|layoff|bankrupt|acquired|shut|non-target|out of region/i.test(x));
-    if (!verified.length && hasLLM()) { a.status = "filtered"; a.filter_reason = "Citation gate: no claim traceable to a retrieved source"; dropped++; }
+    if (!verified.length && hasLLM() && retrieved.size > 0) { a.status = "filtered"; a.filter_reason = "Citation gate: no claim traceable to a retrieved source"; dropped++; }
     else if (neg) { a.status = "filtered"; a.filter_reason = `Negative signal: ${neg}`; dropped++; }
     a.buyerCount = (c.buyers || []).length;
     Object.assign(a, scoreAccount(a, icp));

@@ -14,7 +14,7 @@
 ![Render](https://img.shields.io/badge/Render-deployed-46E3B7?logo=render&logoColor=white)
 ![License: MIT](https://img.shields.io/badge/license-MIT-white)
 
-**[Live demo](https://gravity-gtm.onrender.com)** · **[Architecture](docs/ARCHITECTURE.md)** · **[Pitch deck](deck/)** · **[Demo script](deck/demo-video-script.md)** · **[Sponsors](deck/sponsors.md)**
+**[Live demo](https://gravity-gtm.onrender.com)** · **[Architecture](docs/ARCHITECTURE.md)** · **[10-min demo runbook](docs/DEMO-10MIN.md)** · **[Pitch deck](deck/)** · **[Demo script](deck/demo-video-script.md)** · **[Sponsors](deck/sponsors.md)**
 
 </div>
 
