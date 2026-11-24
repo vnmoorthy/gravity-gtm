@@ -148,10 +148,10 @@ Words: 35 · running total: 381
 
 ## S9 · Architecture & sponsor stack · 2:40–2:50 (10s)
 
-**On screen:** Slide 9, "Real APIs / in the critical path." (architecture and sponsor tiles).
+**On screen:** Slide 9, "Real APIs / in the critical path." (architecture and sponsor tiles). Point at the core sponsor tiles in the order you name them: Flexprice, RocketRide, HotData, Moss, Teamily.
 **Live cut:** none.
 
-> Under the hood: Claude for reasoning and cited web search, Band for orchestration, Flexprice for metering, Nexla into your CRM, Snyk in CI, deployed on Render.
+> Under the hood: Flexprice meters every action, RocketRide runs our signal pipeline, HotData is the agent warehouse, Moss powers search, and Teamily approves outreach via MCP.
 
 Words: 26 · running total: 407
 

@@ -109,7 +109,7 @@ h1 .l2,h2 .l2{display:block;color:var(--mut)}
 h1{font-size:58px;line-height:1.02;margin-top:56px}
 .s1 .sub{margin-top:28px;font-size:19px;line-height:1.5;color:var(--body);max-width:500px}
 .s1 .sub b{font-weight:500;color:var(--ink)}
-.s1 .pills{display:flex;gap:8px;margin-top:26px}
+.s1 .pills{display:flex;gap:7px;margin-top:26px;flex-wrap:wrap}
 .s1 .pills .pill::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ink)}
 .s1 .pills .pill:first-child::before{background:var(--cobalt)}
 .s1-foot{margin-top:auto;font-family:var(--mono);font-size:12px;color:var(--mut);letter-spacing:.05em}
@@ -271,7 +271,7 @@ h1{font-size:58px;line-height:1.02;margin-top:56px}
 .bp code{font-family:var(--mono);font-size:11px;color:var(--cobalt);display:block;margin-top:4px}
 
 /* ---------- S8 ---------- */
-.s8top{display:grid;grid-template-columns:400px 300px 1fr;gap:18px;margin-top:18px;height:300px}
+.s8top{display:grid;grid-template-columns:400px 300px 1fr;gap:18px;margin-top:18px;height:310px}
 .wallet{padding:14px 18px;display:flex;flex-direction:column;position:relative;overflow:hidden}
 .whead{display:flex;align-items:center;justify-content:space-between}
 .sim{font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--hair2);color:var(--ink);background:#fff;transition:transform .2s,background .2s}
@@ -295,7 +295,7 @@ h1{font-size:58px;line-height:1.02;margin-top:56px}
 .g402.ok{border-color:#86efac;color:#14532d;box-shadow:0 18px 40px -20px rgba(21,128,61,.4)}
 .g402.ok b{background:var(--green)}
 .meters{padding:14px 18px;display:flex;flex-direction:column}
-.mrow{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:13px;padding:5px 0;border-bottom:1px solid var(--hair);color:var(--ink)}
+.mrow{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:12.5px;padding:3.5px 0;border-bottom:1px solid var(--hair);color:var(--ink)}
 .mrow b{font-weight:500}
 .mrow.hl b{color:var(--cobalt)}
 .flow{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-family:var(--mono);font-size:11px}
@@ -310,7 +310,7 @@ h1{font-size:58px;line-height:1.02;margin-top:56px}
 .unit .br{margin-top:8px;font-size:14.5px;color:var(--body);line-height:1.4}
 .unit .br em{font-style:normal;color:var(--mut);font-family:var(--mono);font-size:12px}
 .s8right .shot{flex:1;min-height:0}
-.plabel{margin-top:20px}
+.plabel{margin-top:16px}
 .prices{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:10px}
 .prc{padding:14px 18px}
 .prc .tier{display:flex;align-items:baseline;justify-content:space-between}
@@ -322,16 +322,26 @@ h1{font-size:58px;line-height:1.02;margin-top:56px}
 .prc.hl p,.prc.hl .tier b small{color:#a1a1aa}
 
 /* ---------- S9 ---------- */
-.arch{display:grid;grid-template-columns:300px 60px 330px 60px 1fr;align-items:stretch;margin-top:18px;height:150px}
-.abox{padding:14px 18px;display:flex;flex-direction:column;justify-content:center}
+.arch{display:grid;grid-template-columns:290px 56px 290px 56px 1fr;align-items:stretch;margin-top:16px;height:96px}
+.corelbl{margin-top:16px}
+.core{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:8px}
+.ctile{padding:14px 16px 12px;min-height:178px;border:1.5px solid var(--ink);display:flex;flex-direction:column}
+.ctile h4{font-size:22px;font-weight:500;letter-spacing:-.02em}
+.ctile p{font-size:14px;line-height:1.4;color:var(--body);margin-top:6px}
+.ctile code{margin-top:auto;padding-top:8px;font-family:var(--mono);font-size:11px;color:var(--cobalt)}
+.sec{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-top:12px}
+.stile{padding:9px 12px;min-height:66px}
+.stile h5{font-size:14.5px;font-weight:600}
+.stile p{font-size:12.5px;line-height:1.35;color:var(--mut);margin-top:3px}
+.abox{padding:10px 16px;display:flex;flex-direction:column;justify-content:center}
 .abox h4{font-size:18px;font-weight:600;letter-spacing:-.01em}
-.abox p{font-size:15px;color:var(--body);margin-top:6px;line-height:1.42}
-.abox .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.abox p{font-size:14px;color:var(--body);margin-top:4px;line-height:1.38}
+.abox .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
 .abox .chips span{font-size:12.5px;padding:3px 9px;border-radius:999px;border:1px solid var(--hair);color:var(--ink);background:var(--paper)}
 .abox.cb{border-color:var(--cobalt)}
 .conn{position:relative}
 .conn svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.conn .lab{position:absolute;left:0;right:0;top:calc(50% - 28px);text-align:center;font-family:var(--mono);font-size:10.5px;color:var(--mut)}
+.conn .lab{position:absolute;left:0;right:0;top:calc(50% - 22px);text-align:center;font-family:var(--mono);font-size:10.5px;color:var(--mut)}
 .flowline{stroke-dasharray:4 6;animation:dash 0.9s linear infinite}
 @keyframes dash{to{stroke-dashoffset:-10}}
 .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
@@ -345,7 +355,7 @@ h1{font-size:58px;line-height:1.02;margin-top:56px}
 
 /* ---------- S10 ---------- */
 .cols3{display:grid;grid-template-columns:1fr 1.08fr 1fr;gap:16px;margin-top:20px}
-.col{padding:16px 20px;min-height:206px}
+.col{padding:16px 20px;min-height:196px}
 .col h4{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;color:var(--mut);text-transform:uppercase;font-weight:400}
 .col p{font-size:16.5px;line-height:1.45;color:var(--body);margin-top:10px}
 .col ul{list-style:none;margin-top:8px}
@@ -355,7 +365,10 @@ h1{font-size:58px;line-height:1.02;margin-top:56px}
 @keyframes tick{to{opacity:1;transform:none}}
 .ask{margin-top:16px;display:flex;align-items:center;gap:14px;font-size:18px;color:var(--ink)}
 .ask b{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;color:#fff;background:var(--cobalt);padding:4px 10px;border-radius:999px;font-weight:500}
-.s10 .media{margin-top:16px;flex:1;min-height:0}
+.built{margin-top:10px;display:flex;align-items:center;gap:7px}
+.built .lbl{margin-right:6px}
+.built .pill{font-size:13px;padding:4px 11px}
+.s10 .media{margin-top:14px;flex:1;min-height:0}
 .s10 .media img{object-position:80% 46%}
 .s10 .media .shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,7,12,.92) 0%,rgba(7,7,12,.75) 45%,rgba(7,7,12,.1) 80%)}
 .closing{position:absolute;left:30px;top:22px;font-weight:300;letter-spacing:-.03em;font-size:38px;line-height:1.06;color:#fff}
@@ -400,7 +413,7 @@ h1{font-size:58px;line-height:1.02;margin-top:56px}
       </div>
       <h1 class="r" style="--d:1"><span class="l1">The Revenue Engine</span><span class="l2">from one sentence to booked meetings.</span></h1>
       <p class="sub r" style="--d:3">The self-driving GTM engine. Glass-box by design: <b>every claim cited, every send approved, every credit metered.</b></p>
-      <div class="pills r" style="--d:4"><span class="pill">Claude</span><span class="pill">Band</span><span class="pill">Flexprice</span></div>
+      <div class="lbl r fade" style="--d:4;margin-top:26px">CORE SPONSORS</div><div class="pills r" style="--d:4;margin-top:8px"><span class="pill">Teamily.ai</span><span class="pill">RocketRide</span><span class="pill">HotData</span><span class="pill">Flexprice</span><span class="pill">Moss</span></div>
       <div class="s1-foot r fade" style="--d:6">HackwithBay 4.0 · AI GTM Engine · San Francisco · Nov 24, 2026</div>
     </div>
     <div class="media r zoom" style="--d:2" data-orbit='{"cx":0.5,"cy":0.49,"s":0.6}'>
@@ -522,7 +535,7 @@ h1{font-size:58px;line-height:1.02;margin-top:56px}
           <div class="play card r left" style="--d:5"><div class="pn">03</div><div><h4>Competitor displacement</h4><p>Uses the incumbent + renewal or churn signal → displacement angle.</p></div></div>
         </div>
         <div class="cypher r wipe" style="--d:7"><span class="kw">MATCH</span> p=(me:<span class="lb">Person</span> {team:true})-[:PREVIOUSLY_EMPLOYED_AT|STUDIED_AT*1..2]-(x)-[:WORKS_AT]-(buyer:<span class="lb">Person</span>) <span class="kw">RETURN</span> p</div>
-        <div class="caption r" style="--d:8">Click a path: it lights up, the camera flies to it, and the Writer drafts the intro ask. Optional Neo4j mirror.</div>
+        <div class="caption r" style="--d:8">Click a path: it lights up, the camera flies to it, and the Writer drafts the intro ask. Moss finds lookalike accounts; optional Neo4j mirror.</div>
       </div>
     </div>
   </section>
@@ -580,7 +593,7 @@ h1{font-size:58px;line-height:1.02;margin-top:56px}
         <div class="bandpts">
           <div class="bp card r" style="--d:6">Every agent step posted to a real Band room as an event<code>POST /api/v1/agent/chats/{id}/events</code></div>
           <div class="bp card r" style="--d:7">HITL requests go out as @mention messages to the humans in the room</div>
-          <div class="bp card r" style="--d:8">Reply “approve” or “reject” in Band and Gravity resolves the decision (two-way HITL)</div>
+          <div class="bp card r" style="--d:8">Approve from Band, or from a Teamily group via Gravity's MCP server (two-way HITL)</div>
           <div class="bp card r" style="--d:9">Per-agent token + $ telemetry; command bar: “@Scout find 4 more”, “@Writer draft”</div>
         </div>
       </div>
@@ -609,6 +622,7 @@ h1{font-size:58px;line-height:1.02;margin-top:56px}
           <div class="mrow hl">outreach_sent<b>2</b></div>
           <div class="mrow">graph_query<b>1</b></div>
           <div class="mrow">signal_refresh<b>2</b></div>
+          <div class="mrow">semantic_query<b>0.5</b></div>
         </div>
         <div class="flow"><span>check balance</span><i>→</i><span>debit</span><i>→</i><span class="k">POST /v1/events</span><i>→</i><span>wallet top-up</span></div>
       </div>
@@ -635,23 +649,29 @@ h1{font-size:58px;line-height:1.02;margin-top:56px}
     <div class="eyebrow r" style="--d:0">Architecture</div>
     <h2 class="r" style="--d:1"><span class="l1">Real APIs</span><span class="l2">in the critical path.</span></h2>
     <div class="arch">
-      <div class="abox card r" style="--d:2"><h4>React + Vite UI</h4><div class="chips"><span>3D graph</span><span>SSE stream</span><span>HITL terminal</span><span>Kanban</span></div></div>
-      <div class="conn r fade" style="--d:3"><div class="lab">SSE ⇄</div><svg viewBox="0 0 60 150" preserveAspectRatio="none"><line class="flowline" x1="2" y1="75" x2="58" y2="75" stroke="#0d0d0e" stroke-width="1.4"/></svg></div>
-      <div class="abox card r" style="--d:4"><h4>Node / Express</h4><div class="chips"><span>11 agents</span><span>pipeline</span><span>graph engine</span><span>audit log</span></div></div>
-      <div class="conn r fade" style="--d:5"><div class="lab" style="top:2px">REST</div><svg viewBox="0 0 60 150" preserveAspectRatio="none"><line class="flowline" x1="2" y1="75" x2="58" y2="34" stroke="#2f5bea" stroke-width="1.4"/><line class="flowline" x1="2" y1="75" x2="58" y2="75" stroke="#2f5bea" stroke-width="1.4"/><line class="flowline" x1="2" y1="75" x2="58" y2="116" stroke="#2f5bea" stroke-width="1.4"/></svg></div>
-      <div class="abox card cb r" style="--d:6"><h4>Services</h4><p>Claude · Band · Flexprice · Nexla · Neo4j · DNS / MX · Hunter.io · Resend / SendGrid</p></div>
+      <div class="abox card r" style="--d:2"><h4>React + Vite UI</h4><div class="chips"><span>3D graph</span><span>SSE</span><span>HITL</span><span>⌘K search</span></div></div>
+      <div class="conn r fade" style="--d:3"><div class="lab">SSE ⇄</div><svg viewBox="0 0 60 96" preserveAspectRatio="none"><line class="flowline" x1="2" y1="48" x2="58" y2="48" stroke="#0d0d0e" stroke-width="1.4"/></svg></div>
+      <div class="abox card r" style="--d:4"><h4>Node / Express</h4><div class="chips"><span>11 agents</span><span>pipeline</span><span>MCP server</span></div></div>
+      <div class="conn r fade" style="--d:5"><div class="lab" style="top:0">API</div><svg viewBox="0 0 60 96" preserveAspectRatio="none"><line class="flowline" x1="2" y1="48" x2="58" y2="22" stroke="#2f5bea" stroke-width="1.4"/><line class="flowline" x1="2" y1="48" x2="58" y2="48" stroke="#2f5bea" stroke-width="1.4"/><line class="flowline" x1="2" y1="48" x2="58" y2="74" stroke="#2f5bea" stroke-width="1.4"/></svg></div>
+      <div class="abox card cb r" style="--d:6"><h4>Sponsor services</h4><p>Teamily.ai · RocketRide · HotData · Flexprice · Moss · Claude · Band · Nexla · Neo4j</p></div>
     </div>
-    <div class="tiles">
-      <div class="tile card r" style="--d:7"><h4>Claude</h4><p>ICP inference, server-side web search for cited discovery, Writer, Reviewer, Buyer Twin</p><code>claude-opus-5-5</code></div>
-      <div class="tile card r" style="--d:8"><h4>Band</h4><p>Agent war room mirrored to a real Band room, @mention HITL, approve from Band</p></div>
-      <div class="tile card r" style="--d:9"><h4>Flexprice</h4><p>7 meters, usage events, wallet, 402 credit gate, top-up</p></div>
-      <div class="tile card r" style="--d:10"><h4>Render</h4><p>Blueprint deploy (web + API in one service)</p></div>
-      <div class="tile card r" style="--d:11"><h4>Snyk</h4><p>SCA + SAST GitHub Action on every push</p></div>
-      <div class="tile card r" style="--d:12"><h4>Nexla</h4><p>Webhook stream of enriched leads and sends into CRM / warehouse flows</p></div>
-      <div class="tile card r" style="--d:13"><h4>Neo4j-ready</h4><p>Cypher for every query; optional live mirror</p></div>
-      <div class="tile card r" style="--d:14"><h4>Blender</h4><p>Procedurally rendered hero art</p></div>
+    <div class="corelbl lbl r fade" style="--d:7">CORE SPONSORS</div>
+    <div class="core">
+      <div class="ctile card r" style="--d:7"><h4>Teamily.ai</h4><p>Gravity's own MCP server: Teamily groups add it as a connector, then ask about and approve outreach from group chat.</p><code>/mcp · approve_message</code></div>
+      <div class="ctile card r" style="--d:8"><h4>RocketRide</h4><p>Signal pipeline: every account's signals run through a .pipe that normalizes and classifies them before scoring.</p><code>rocketride SDK · .pipe</code></div>
+      <div class="ctile card r" style="--d:9"><h4>HotData</h4><p>Agent data warehouse: leads, outreach, pipeline and usage sync to tables; SQL console + agents query it.</p><code>POST /v1/query</code></div>
+      <div class="ctile card r" style="--d:10"><h4>Flexprice</h4><p>8 meters, usage events, wallet, 402 credit gate and top-up. Every billable action is metered.</p><code>POST /v1/events</code></div>
+      <div class="ctile card r" style="--d:11"><h4>Moss</h4><p>Semantic search: ⌘K Ask Gravity, lookalike accounts, Reviewer evidence and Writer grounding.</p><code>semantic_query · 0.5 cr</code></div>
     </div>
-    <div class="alsoreal r" style="--d:15"><svg class="ic" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Also real: DNS A + MX lookups, Hunter.io verifier, Resend / SendGrid sandbox dispatch</div>
+    <div class="sec">
+      <div class="stile card r" style="--d:12"><h5>Claude</h5><p>ICP, cited web discovery, Writer, Reviewer</p></div>
+      <div class="stile card r" style="--d:12.5"><h5>Band</h5><p>agent war room + @mention HITL</p></div>
+      <div class="stile card r" style="--d:13"><h5>Snyk</h5><p>SCA + SAST in CI</p></div>
+      <div class="stile card r" style="--d:13.5"><h5>Nexla</h5><p>leads → CRM webhook</p></div>
+      <div class="stile card r" style="--d:14"><h5>Render</h5><p>blueprint deploy</p></div>
+      <div class="stile card r" style="--d:14.5"><h5>Blender</h5><p>hero art</p></div>
+      <div class="stile card r" style="--d:15"><h5>Neo4j</h5><p>Cypher mirror</p></div>
+    </div>
   </section>
 
   <!-- ============ S10 CLOSE ============ -->
@@ -664,7 +684,7 @@ h1{font-size:58px;line-height:1.02;margin-top:56px}
         <ul>
           <li style="--i:0"><svg class="ic" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Live on Render</li>
           <li style="--i:1"><svg class="ic" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>11 agents on Band</li>
-          <li style="--i:2"><svg class="ic" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>7 Flexprice meters streaming</li>
+          <li style="--i:2"><svg class="ic" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>8 Flexprice meters streaming</li>
           <li style="--i:3"><svg class="ic" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Real DNS / MX</li>
           <li style="--i:4"><svg class="ic" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Citation gate on every account</li>
           <li style="--i:5"><svg class="ic" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Snyk-scanned CI</li>
@@ -673,6 +693,7 @@ h1{font-size:58px;line-height:1.02;margin-top:56px}
       <div class="col card r" style="--d:4"><h4>Wedge &amp; moat</h4><p>Seed to Series A founders doing founder-led sales. The graph compounds: every approve, edit, reject and reply is labeled data tied to evidence.</p></div>
     </div>
     <div class="ask r" style="--d:6"><b>THE ASK</b>10 founder-led teams to pilot Gravity this quarter, and your vote today.</div>
+    <div class="built r" style="--d:6.5"><span class="lbl">BUILT WITH</span><span class="pill">Teamily.ai</span><span class="pill">RocketRide</span><span class="pill">HotData</span><span class="pill">Flexprice</span><span class="pill">Moss</span></div>
     <div class="media r zoom" style="--d:7" data-orbit='{"cx":0.82,"cy":0.5,"s":0.36}'>
       <img src="../assets/hero-raw.png" alt="" onerror="this.style.display='none'">
       <canvas></canvas>
@@ -720,7 +741,7 @@ const NOTES = [
   ["1:45–2:10", "Cut to HITL Review: press Inject lie. The Reviewer strikes the fake $250M Series E and the Buyer Twin's odds drop."],
   ["2:10–2:25", "Every handoff is mirrored into a real Band room. I can approve from Band."],
   ["2:25–2:40", "Every action is a Flexprice event. Simulate low balance: two sends drain it, 402, autopilot pauses. Top up 200, it resumes. About $1.20 per buyer worked."],
-  ["2:40–2:50", "Real APIs in the critical path: Claude, Band, Flexprice, Render, Snyk, Nexla."],
+  ["2:40–2:50", "Core sponsors in the critical path: Teamily.ai (MCP approvals), RocketRide (signal pipeline), HotData (warehouse), Flexprice (metering), Moss (semantic search). Plus Claude, Band, Snyk, Nexla, Render."],
   ["2:50–3:00", "We want ten founder-led teams to pilot it. Self-driving, but you hold the brakes and the wallet."],
 ];
 const notesEl = document.getElementById("notes");

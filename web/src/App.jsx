@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Rocket, Target, Network, Building2, Swords, MailCheck, KanbanSquare, BarChart3, Users2, CreditCard, PanelRightClose, PanelRightOpen, Sparkles, Zap, Radio, Search } from "lucide-react";
+import { Rocket, Target, Network, Building2, Swords, MailCheck, KanbanSquare, BarChart3, Users2, CreditCard, PanelRightClose, PanelRightOpen, Sparkles, Zap, Radio, Search, Database } from "lucide-react";
 import { useWorkspace, fmt, api } from "./api";
 import { ToastProvider, cx, Md } from "./ui";
 import Mission from "./views/Mission";
@@ -12,6 +12,7 @@ import Pipeline from "./views/Pipeline";
 import Analytics from "./views/Analytics";
 import WarRoom from "./views/WarRoom";
 import Billing from "./views/Billing";
+import Data from "./views/Data";
 
 const NAV = [
   { id: "mission", label: "Mission Control", icon: Rocket },
@@ -24,6 +25,7 @@ const NAV = [
   { id: "analytics", label: "Analytics", icon: BarChart3 },
   { id: "warroom", label: "Agent War Room", icon: Users2 },
   { id: "billing", label: "Spend Governor", icon: CreditCard },
+  { id: "data", label: "Data & Connectors", icon: Database },
 ];
 
 const STEPS = [["icp", "ICP"], ["discovery", "Discover"], ["enrichment", "Enrich"], ["outreach", "Outreach"], ["review", "Review"]];
@@ -156,7 +158,7 @@ export default function App() {
   const integ = state?.integrations || {};
   const props = { ...ws, go: setView };
 
-  const V = { mission: Mission, icp: ICP, graph: Graph, accounts: Accounts, competitors: Competitors, outreach: Outreach, pipeline: Pipeline, analytics: Analytics, warroom: WarRoom, billing: Billing }[view] || Mission;
+  const V = { mission: Mission, icp: ICP, graph: Graph, accounts: Accounts, competitors: Competitors, outreach: Outreach, pipeline: Pipeline, analytics: Analytics, warroom: WarRoom, billing: Billing, data: Data }[view] || Mission;
 
   return (
     <ToastProvider>
@@ -182,8 +184,8 @@ export default function App() {
             })}
           </div>
           <div className="p-3 border-t border-white/5 space-y-1.5 text-[11px]">
-            {[["Claude", integ.claude], ["Moss", integ.moss?.engine === "moss"], ["Flexprice", integ.flexprice?.enabled], ["Band", integ.band?.enabled], ["Neo4j", integ.neo4j], ["Hunter", integ.hunter], ["Email", Boolean(integ.email?.provider)], ["Nexla", integ.nexla], ["Snyk CI", true]].map(([k, v]) => (
-              <div key={k} className="flex items-center justify-between text-zinc-500"><span>{k}</span><span className={cx("flex items-center gap-1.5", v ? "text-emerald-400" : "text-zinc-600")}><span className={cx("size-1.5 rounded-full", v ? "bg-emerald-400" : "bg-zinc-600")} />{v ? "live" : k === "Neo4j" || k === "Moss" ? "built-in" : "demo"}</span></div>
+            {[["Claude", integ.claude], ["Moss", integ.moss?.engine === "moss"], ["HotData", integ.hotdata?.engine === "hotdata"], ["RocketRide", integ.rocketride?.engine === "rocketride"], ["Teamily MCP", true], ["Flexprice", integ.flexprice?.enabled], ["Band", integ.band?.enabled], ["Neo4j", integ.neo4j], ["Hunter", integ.hunter], ["Email", Boolean(integ.email?.provider)], ["Nexla", integ.nexla], ["Snyk CI", true]].map(([k, v]) => (
+              <div key={k} className="flex items-center justify-between text-zinc-500"><span>{k}</span><span className={cx("flex items-center gap-1.5", v ? "text-emerald-400" : "text-zinc-600")}><span className={cx("size-1.5 rounded-full", v ? "bg-emerald-400" : "bg-zinc-600")} />{v ? "live" : ["Neo4j", "Moss", "HotData", "RocketRide"].includes(k) ? "built-in" : "demo"}</span></div>
             ))}
           </div>
         </nav>

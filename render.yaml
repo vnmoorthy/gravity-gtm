@@ -33,5 +33,13 @@ services:
         sync: false
       - key: MOSS_PROJECT_KEY
         sync: false
+      - key: HOTDATA_API_KEY
+        sync: false
+      - key: HOTDATA_WORKSPACE_ID
+        sync: false
+      - key: ROCKETRIDE_APIKEY
+        sync: false
+      - key: GRAVITY_MCP_TOKEN
+        sync: false
       - key: DISPATCH_MODE
         value: sandbox

@@ -1,0 +1,13 @@
+{
+  "pipeline": {
+    "name": "gravity-signals",
+    "description": "Gravity signal-processing pipeline: receives an account + raw buying signals (JSON) via webhook, normalises and classifies each signal (funding, exec_hire, hiring, tech_change, expansion, product_launch, regulatory), de-duplicates, flags stale (>365d) items and returns {signals:[...]} for scoring.",
+    "source": "webhook_1",
+    "components": [
+      { "id": "webhook_1", "provider": "webhook", "config": { "mode": "Source", "type": "webhook" } },
+      { "id": "prompt_1", "provider": "prompt", "config": { "instructions": ["You normalise B2B buying signals. Input JSON has {account, domain, signals:[{type,text,date,source}]}. Classify each signal type as one of funding|exec_hire|hiring|tech_change|expansion|product_launch|regulatory|news, drop exact duplicates, mark stale=true when date is older than 365 days, never invent new signals or URLs. Return ONLY JSON {\"signals\":[...]} preserving text, date and source."] }, "input": [{ "lane": "text", "from": "webhook_1" }] },
+      { "id": "llm_1", "provider": "llm_anthropic", "config": { "model": "claude-haiku-5-5" }, "input": [{ "lane": "questions", "from": "prompt_1" }] },
+      { "id": "response_1", "provider": "response", "input": [{ "lane": "answers", "from": "llm_1" }] }
+    ]
+  }
+}

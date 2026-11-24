@@ -7,6 +7,8 @@ import { enrichPerson } from "./enrich.js";
 import { warmPaths, hiringToEvaluation, displacement } from "./graph.js";
 import * as demo from "./demo.js";
 import { search as mossSearch, scheduleSync, syncIndex } from "./moss.js";
+import { processAccount, publish as publishRocket } from "./rocketride.js";
+import { scheduleWarehouseSync } from "./hotdata.js";
 
 const clamp = (n, a = 0, b = 1) => Math.max(a, Math.min(b, Number(n) || 0));
 const host = (u = "") => { try { return new URL(u.startsWith("http") ? u : "https://" + u).hostname.replace(/^www\./, ""); } catch { return ""; } };
@@ -173,6 +175,7 @@ export async function discover(opts = {}) {
     const neg = (a.negative || []).find((x) => /freeze|layoff|bankrupt|acquired|shut|non-target|out of region/i.test(x));
     if (!verified.length && hasLLM() && retrieved.size > 0) { a.status = "filtered"; a.filter_reason = "Citation gate: no claim traceable to a retrieved source"; dropped++; }
     else if (neg) { a.status = "filtered"; a.filter_reason = `Negative signal: ${neg}`; dropped++; }
+    try { a.signals = await processAccount(a); } catch { /* pipeline optional */ }
     a.buyerCount = (c.buyers || []).length;
     Object.assign(a, scoreAccount(a, icp));
     try { await meter("account_discovered", 1, { account: a.name }); } catch (e) { if (e instanceof CreditError) { say("governor", `⛔ ${e.message}. Discovery paused — @You top up credits to continue.`, { to: ["human"], kind: "billing" }); break; } }
@@ -188,6 +191,8 @@ export async function discover(opts = {}) {
     if (a.status !== "filtered") kept++;
     emit("accounts", { accounts: state.accounts, people: state.people });
   }
+  publishRocket();
+  say("scout", `RocketRide pipeline normalised & classified signals for ${companies.length} accounts (${state.integrations.rocketride?.engine || "local"}).`, { kind: "thought" });
   say("scout", `Citation gate: kept ${kept} accounts, dropped ${dropped} (no verifiable source or negative signal). ${state.people.length} named buyers on file.`, { to: ["cartographer"], kind: "handoff" });
   audit("ai", "discovery_completed", { kept, dropped });
   await compPromise;
@@ -242,6 +247,7 @@ export async function graphPass() {
   say("cartographer", `Graph updated: ${state.accounts.filter((a) => a.status !== "filtered").length} companies · ${state.people.length} people · ${state.competitors.length} competitors. Multi-hop: ${wp.length} warm intro paths, ${hc.length} hiring→evaluation links, ${dp.length} displacement plays.`, { to: ["enricher", "writer"], kind: "result", data: { warm: wp.slice(0, 5), hiring: hc.slice(0, 5), displacement: dp.slice(0, 5) } });
   emit("graph", {});
   scheduleSync(200);
+  scheduleWarehouseSync(1500);
   return { wp, hc, dp };
 }
 

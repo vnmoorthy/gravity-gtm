@@ -13,6 +13,9 @@ import { buildGraph, QUERIES, initNeo4j, neo4jConnected, syncNeo4j } from "./gra
 import { sendEmail, pushToNexla, dispatchMode, emailProvider } from "./dispatch.js";
 import * as P from "./pipeline.js";
 import { search as mossSearch, lookalikes, syncIndex, status as mossStatus, mossEnabled } from "./moss.js";
+import { query as warehouseQuery, PRESETS as WAREHOUSE_PRESETS, syncWarehouse, status as hotdataStatus, scheduleWarehouseSync } from "./hotdata.js";
+import { status as rocketStatus } from "./rocketride.js";
+import { mountMcp, MCP_TOOLS } from "./mcp.js";
 
 load();
 ensureBilling();
@@ -52,6 +55,9 @@ function integrations() {
     nexla: Boolean(process.env.NEXLA_WEBHOOK_URL),
     snyk: true,
     moss: mossStatus(),
+    hotdata: hotdataStatus(),
+    rocketride: rocketStatus(),
+    mcp: { tools: MCP_TOOLS.map((t) => t.name), ...(state.integrations.mcp || {}), auth: Boolean(process.env.GRAVITY_MCP_TOKEN) },
     render: Boolean(process.env.RENDER || process.env.RENDER_SERVICE_ID),
   };
 }
@@ -129,6 +135,23 @@ app.get("/api/accounts/:id/lookalikes", wrap(async (req) => {
   return r;
 }));
 app.post("/api/moss/sync", wrap(async () => await syncIndex()));
+
+// ─── HotData warehouse
+app.get("/api/warehouse/presets", (req, res) => res.json(WAREHOUSE_PRESETS));
+app.post("/api/warehouse/query", wrap(async (req) => {
+  const r = await warehouseQuery(req.body?.sql);
+  say("analyst", `Ran warehouse SQL on ${r.engine === "hotdata" ? "HotData" : "local engine"}: ${r.rows.length} rows in ${r.ms}ms.`, { kind: "result" });
+  return r;
+}));
+app.post("/api/warehouse/sync", wrap(async () => await syncWarehouse()));
+
+// ─── MCP server (Teamily.ai agents & any MCP client)
+mountMcp(app, {
+  search: mossSearch,
+  approve: async (id, note) => { const m = await approveAndSend(findMsg(id), note); emit("messages", state.messages); save(); return m; },
+  radar: () => P.refreshSignals(),
+  sql: warehouseQuery,
+});
 
 // ─── Graph
 app.get("/api/graph", (req, res) => res.json(buildGraph()));
@@ -392,5 +415,6 @@ if (fs.existsSync(dist)) {
 const PORT = process.env.PORT || 8787;
 app.listen(PORT, async () => {
   console.log(`Gravity GTM on :${PORT} · mode=${hasLLM() ? "live" : "demo"} · model=${MODEL}`);
-  await Promise.allSettled([initFlexprice(), initBand(), initNeo4j(), syncIndex()]);
+  await Promise.allSettled([initFlexprice(), initBand(), initNeo4j(), syncIndex(), syncWarehouse()]);
+  setInterval(() => scheduleWarehouseSync(100), 60000);
 });

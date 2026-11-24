@@ -11,6 +11,9 @@
 ![Claude](https://img.shields.io/badge/Claude-opus--5--5-f59e0b?logo=anthropic&logoColor=white)
 ![Band](https://img.shields.io/badge/Band-multi--agent-8b5cf6)
 ![Moss](https://img.shields.io/badge/Moss-semantic%20search-2f5bea)
+![HotData](https://img.shields.io/badge/HotData-warehouse-0d0d0e)
+![RocketRide](https://img.shields.io/badge/RocketRide-pipelines-d97706)
+![Teamily](https://img.shields.io/badge/Teamily.ai-MCP-7c3aed)
 ![Flexprice](https://img.shields.io/badge/Flexprice-metered-84cc16)
 ![Render](https://img.shields.io/badge/Render-deployed-46E3B7?logo=render&logoColor=white)
 ![License: MIT](https://img.shields.io/badge/license-MIT-white)
@@ -105,6 +108,9 @@ Deep dive, covering query logic, graph ontology, reasoning loops, scoring, the t
 |---|---|---|
 | **Band** | The war room is mirrored into a real Band chat room through Band's agent REST API (`/agent/chats/{id}/events` for steps, `/messages` with @mentions for HITL). Humans reply `approve` / `reject` in Band and Gravity resolves the decision. | Agent War Room header "Mirrored to Band room…"; HITL decisions |
 | **Flexprice** | `icp_inference`, `account_discovered`, `lead_enriched`, `outreach_generated`, `outreach_sent`, `graph_query` and `signal_refresh` are streamed to `POST /v1/events` (idempotent `event_id`). Customer and wallet are created on boot. A credit gate blocks spend with 402, and top-up calls `/wallets/{id}/top-up`. | Credit meter in the top bar, Spend Governor page, "Simulate low balance" demo |
+| **Teamily.ai** *(core)* | Gravity ships an **MCP server** (`POST /mcp`, Streamable HTTP; tools `search_workspace`, `get_pipeline`, `list_pending_approvals`, `approve_message`, `run_signal_radar`, `warehouse_query`). Teamily AI teammates add it as a connector, so a sales group can query the pipeline and approve outreach from chat. Every approval is audit-logged. | Data & Connectors → MCP connector card; approvals in the audit log |
+| **RocketRide** *(core)* | Every discovered account's raw signals go through a RocketRide pipeline (`pipelines/gravity-signals.pipe`, `rocketride` SDK `use → send → terminate`) that classifies, de-duplicates and flags stale signals before scoring. A local runtime fallback is used when no key is set. | War Room "RocketRide pipeline normalised…", Data & Connectors card |
+| **HotData** *(core)* | Agent data warehouse: accounts, people, leads, messages and usage events sync to HotData (`api.hotdata.dev`: uploads → loads). The **Warehouse SQL console** and the MCP `warehouse_query` tool run read-only SQL via `POST /v1/query`, with a local SQL engine as fallback. | Data & Connectors → SQL console with preset queries |
 | **Moss** | Every account, buyer, signal and competitor is indexed with `@moss-js/moss` (`createIndex` / `addDocs` upsert / `loadIndex` / `query` with hybrid `alpha`). It serves the ⌘K Ask bar, lookalike accounts, Reviewer evidence and Writer grounding, and each query is metered as `semantic_query` in Flexprice. | ⌘K Ask bar (engine badge "Moss · Xms"), "Find lookalikes" on Accounts, "Evidence retrieved" in HITL Review |
 | **Render** | `render.yaml` blueprint: Node web service, `/healthz` health check, secrets via `sync:false`. | Live demo URL |
 | **Snyk** | SCA (`snyk test`) and SAST (`snyk code test`) on every push, with SARIF uploaded to GitHub code scanning. Sentinel brings the same mindset to runtime: outbound links, PII and injection. | Snyk badge / Actions tab |
