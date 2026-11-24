@@ -544,7 +544,7 @@ h1{font-size:58px;line-height:1.02;margin-top:56px}
             <p>Saw you're hiring an AP automation lead<span class="cite">1</span></p>
           </div>
           <div class="twin">
-            <span>Buyer Twin reply odds</span><span><b id="odds">30%</b>&nbsp;&nbsp;<span>was 30% · ×0.4 when a claim is unsupported</span></span>
+            <span>Buyer Twin reply odds</span><span><b id="odds">40%</b>&nbsp;&nbsp;<span>was 40% · ×0.4 when a claim is unsupported</span></span>
             <span>Top objection</span><span style="color:#0d0d0e">“Timing — not a priority this quarter”</span>
             <span class="src">[1] public job post · retrieved by Scout · URL on the node</span>
           </div>
@@ -776,8 +776,8 @@ scenes[4] = (s) => {
 // S6: inject lie -> scan -> strike -> chip -> odds drop
 scenes[5] = (s) => {
   const lie = s.querySelector("#lie"), chip = s.querySelector("#rchip"), odds = s.querySelector("#odds"), zap = s.querySelector("#zap"), scan = s.querySelector("#scan");
-  lie.classList.remove("struck", "hot"); chip.classList.remove("on"); odds.textContent = "30%"; odds.classList.remove("down"); zap.classList.remove("press"); scan.classList.remove("go");
-  if (RM) { lie.classList.add("struck"); chip.classList.add("on"); odds.textContent = "12%"; odds.classList.add("down"); return; }
+  lie.classList.remove("struck", "hot"); chip.classList.remove("on"); odds.textContent = "40%"; odds.classList.remove("down"); zap.classList.remove("press"); scan.classList.remove("go");
+  if (RM) { lie.classList.add("struck"); chip.classList.add("on"); odds.textContent = "16%"; odds.classList.add("down"); return; }
   later(() => { zap.classList.add("press"); lie.classList.add("hot"); }, 1500);
   later(() => scan.classList.add("go"), 1900);
   later(() => { lie.classList.add("struck"); }, 2700);
@@ -785,7 +785,7 @@ scenes[5] = (s) => {
   const my = token;
   later(() => {
     odds.classList.add("down"); const t0 = performance.now();
-    const step = (t) => { if (my !== token) return; const k = Math.min(1, (t - t0) / 900); odds.textContent = Math.round(30 - 18 * (1 - Math.pow(1 - k, 3))) + "%"; if (k < 1) requestAnimationFrame(step); };
+    const step = (t) => { if (my !== token) return; const k = Math.min(1, (t - t0) / 900); odds.textContent = Math.round(40 - 24 * (1 - Math.pow(1 - k, 3))) + "%"; if (k < 1) requestAnimationFrame(step); };
     requestAnimationFrame(step);
   }, 3700);
 };
