@@ -4,7 +4,7 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGri
 import { api, fmt } from "../api";
 import { Card, Empty, SectionTitle, Button, Badge } from "../ui";
 
-const tip = { contentStyle: { background: "#10101a", border: "1px solid rgba(255,255,255,.1)", borderRadius: 10, fontSize: 12 }, cursor: { fill: "rgba(255,255,255,.03)" } };
+const tip = { contentStyle: { background: "#ffffff", border: "1px solid #e6e4de", borderRadius: 8, fontSize: 12, color: "#0d0d0e" }, cursor: { fill: "rgba(0,0,0,.03)" } };
 const FUN = ["#8b5cf6", "#22d3ee", "#f59e0b", "#34d399", "#a3e635"];
 
 function KPI({ label, value, sub }) {
@@ -34,14 +34,14 @@ export default function Analytics({ state, go }) {
         <Card className="p-5">
           <div className="text-sm font-medium mb-3">Funnel</div>
           <ResponsiveContainer width="100%" height={260}>
-            <FunnelChart><Tooltip {...tip} /><Funnel dataKey="count" data={d.funnel.map((x, i) => ({ ...x, fill: FUN[i], name: x.stage }))} isAnimationActive><LabelList position="right" fill="#a1a1aa" stroke="none" dataKey="stage" fontSize={11} /></Funnel></FunnelChart>
+            <FunnelChart><Tooltip {...tip} /><Funnel dataKey="count" data={d.funnel.map((x, i) => ({ ...x, fill: FUN[i], name: x.stage }))} isAnimationActive><LabelList position="right" fill="#5e5e66" stroke="none" dataKey="stage" fontSize={11} /></Funnel></FunnelChart>
           </ResponsiveContainer>
         </Card>
         <Card className="p-5">
           <div className="text-sm font-medium mb-3">Conversion by industry</div>
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={d.byIndustry} layout="vertical" margin={{ left: 10 }}>
-              <CartesianGrid stroke="rgba(255,255,255,.05)" horizontal={false} /><XAxis type="number" stroke="#52525b" fontSize={11} /><YAxis type="category" dataKey="segment" stroke="#71717a" fontSize={11} width={110} /><Tooltip {...tip} />
+              <CartesianGrid stroke="rgba(0,0,0,.06)" horizontal={false} /><XAxis type="number" stroke="#52525b" fontSize={11} /><YAxis type="category" dataKey="segment" stroke="#71717a" fontSize={11} width={110} /><Tooltip {...tip} />
               <Bar dataKey="leads" fill="#8b5cf6" radius={[0, 4, 4, 0]} /><Bar dataKey="contacted" fill="#22d3ee" radius={[0, 4, 4, 0]} /><Bar dataKey="replied" fill="#f59e0b" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -61,7 +61,7 @@ export default function Analytics({ state, go }) {
           <div className="text-xs text-zinc-500 mb-3">Predicted (Buyer Twin) vs observed reply rate by variant</div>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={d.variants.map((v) => ({ ...v, name: `${v.variant} · ${v.angle}`, predicted: Math.round(v.predicted * 100), observed: Math.round(v.reply_rate * 100) }))}>
-              <CartesianGrid stroke="rgba(255,255,255,.05)" vertical={false} /><XAxis dataKey="name" stroke="#71717a" fontSize={11} /><YAxis stroke="#52525b" fontSize={11} unit="%" /><Tooltip {...tip} />
+              <CartesianGrid stroke="rgba(0,0,0,.06)" vertical={false} /><XAxis dataKey="name" stroke="#71717a" fontSize={11} /><YAxis stroke="#52525b" fontSize={11} unit="%" /><Tooltip {...tip} />
               <Bar dataKey="predicted" fill="#2dd4bf" radius={[4, 4, 0, 0]} /><Bar dataKey="observed" fill="#f472b6" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>

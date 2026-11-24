@@ -374,7 +374,7 @@ export function numberAudit(m) {
   const evidence = [...(acc?.signals || []).map((s) => s.text), acc?.why_fit, acc?.headcount, state.product?.description, (state.icp?.value_props || []).join(" ")].join(" ").toLowerCase();
   const text = `${m.subject} ${m.body}`;
   const out = [];
-  for (const mt of text.matchAll(/(\$\s?\d[\d,.]*\s?(?:k|m|mm|b|million|billion)?|\bseries [a-f]\b|\b\d+(?:\.\d+)?\s?(?:%|x)\b|\b\d{2,}(?:,\d{3})*\s(?:employees|customers|engineers|people|hires|roles|stores|locations))/gi)) {
+  for (const mt of text.matchAll(/(\$\s?\d[\d,.]*\s?(?:k|m|mm|b|million|billion)?|\bseries [a-f]\b|\b\d+(?:\.\d+)?\s?(?:%|x\b)|\b\d{2,}(?:,\d{3})*\s(?:employees|customers|engineers|people|hires|roles|stores|locations))/gi)) {
     const tok = mt[0].toLowerCase().replace(/\s+/g, " ").trim();
     const core = tok.replace(/[$,\s]/g, "").replace(/(million|mm)$/, "m").replace(/billion$/, "b");
     const ev = evidence.replace(/[$,\s]/g, "").replace(/million/g, "m").replace(/billion/g, "b");

@@ -1,39 +1,85 @@
 @import "tailwindcss";
 
+/* ───────────────────────────────────────────────────────────────────────────
+   Gravity "Paper" theme: an editorial, enterprise look (warm paper, black ink,
+   hairline rules, light grotesk display type, sparse cobalt accents).
+   The palette is inverted at the token level so every surface follows it.
+   ─────────────────────────────────────────────────────────────────────────── */
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-serif: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
-  --color-ink-950: #07070c;
-  --color-ink-900: #0c0c14;
-  --color-ink-850: #10101a;
-  --color-ink-800: #151521;
-  --color-ink-700: #1e1e2d;
-  --color-ink-600: #2a2a3d;
-  --color-ink-500: #3b3b55;
-  --color-amber-glow: #f59e0b;
+
+  /* surfaces */
+  --color-ink-950: #f5f4f0;   /* app background (paper) */
+  --color-ink-900: #fbfaf8;   /* rails */
+  --color-ink-850: #ffffff;
+  --color-ink-800: #ffffff;   /* raised */
+  --color-ink-700: #efede8;
+  --color-ink-600: #e4e2dc;
+  --color-ink-500: #cfccc4;
+
+  /* inverted neutrals: "white" is ink, "black" is paper */
+  --color-white: #0d0d0e;
+  --color-black: #ffffff;
+  --color-zinc-50: #0d0d0e;
+  --color-zinc-100: #141416;
+  --color-zinc-200: #26262a;
+  --color-zinc-300: #3a3a40;
+  --color-zinc-400: #5e5e66;
+  --color-zinc-500: #84848c;
+  --color-zinc-600: #a5a5ac;
+  --color-zinc-700: #d6d5d0;
+
+  /* accent tints tuned for paper (light shades → deep, legible inks) */
+  --color-amber-100: #78350f; --color-amber-200: #92400e; --color-amber-300: #b45309; --color-amber-400: #c2410c;
+  --color-emerald-300: #047857; --color-emerald-400: #059669;
+  --color-cyan-300: #0e7490; --color-cyan-400: #0891b2;
+  --color-violet-200: #5b21b6; --color-violet-300: #6d28d9;
+  --color-rose-200: #9f1239; --color-rose-300: #be123c; --color-rose-400: #e11d48;
+  --color-sky-300: #0369a1; --color-sky-400: #0284c7;
+  --color-lime-300: #4d7c0f; --color-lime-400: #65a30d;
+  --color-teal-300: #0f766e;
+  --color-pink-300: #be185d;
+  --color-yellow-300: #a16207;
+  --color-cobalt: #2f5bea;
 }
 
 html, body, #root { height: 100%; }
-body { background: var(--color-ink-950); color: #e7e7ef; font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
-* { scrollbar-width: thin; scrollbar-color: #2a2a3d transparent; }
-::selection { background: #f59e0b55; }
+body { background: #f5f4f0; color: #0d0d0e; font-family: var(--font-sans); -webkit-font-smoothing: antialiased; font-feature-settings: "ss01", "cv11"; }
+* { scrollbar-width: thin; scrollbar-color: #d6d5d0 transparent; }
+::selection { background: #2f5bea22; }
 
-.glass { background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015)); border: 1px solid rgba(255,255,255,0.07); backdrop-filter: blur(12px); }
-.glow-amber { box-shadow: 0 0 0 1px rgba(245,158,11,.35), 0 8px 40px -8px rgba(245,158,11,.45); }
-.grid-bg { background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 22px 22px; }
-.orb { background: radial-gradient(circle at 50% 50%, rgba(245,158,11,.22), transparent 60%), radial-gradient(circle at 80% 20%, rgba(139,92,246,.18), transparent 55%), radial-gradient(circle at 15% 80%, rgba(34,211,238,.12), transparent 50%); }
-.shimmer { background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent); background-size: 200% 100%; animation: shimmer 1.6s infinite; }
+/* display type: light grotesk, tight tracking */
+.font-serif { font-weight: 300 !important; letter-spacing: -0.035em; font-style: normal !important; }
+h1.font-serif { color: #0d0d0e; }
+.sub-ink { color: #8a8a90; }
+
+/* cards: white sheets with hairline borders */
+.glass { background: #ffffff; border: 1px solid #e6e4de; box-shadow: 0 1px 0 rgba(13,13,14,.02), 0 8px 24px -18px rgba(13,13,14,.18); }
+.glow-amber { box-shadow: 0 1px 0 rgba(13,13,14,.03), 0 24px 60px -30px rgba(13,13,14,.25); }
+.grid-bg { background-image: linear-gradient(#e7e5df 1px, transparent 1px), linear-gradient(90deg, #e7e5df 1px, transparent 1px); background-size: 120px 120px; }
+.orb { background: radial-gradient(ellipse at 50% 0%, rgba(47,91,234,.07), transparent 60%); }
+.hairlines { background-image: linear-gradient(90deg, transparent calc(50% - 600px), #e4e2dc calc(50% - 600px), #e4e2dc calc(50% - 599px), transparent calc(50% - 599px), transparent calc(50% + 599px), #e4e2dc calc(50% + 599px), #e4e2dc calc(50% + 600px), transparent calc(50% + 600px)); }
+.shimmer { background: linear-gradient(90deg, transparent, rgba(0,0,0,.05), transparent); background-size: 200% 100%; animation: shimmer 1.6s infinite; }
 @keyframes shimmer { 0% { background-position: 200% 0 } 100% { background-position: -200% 0 } }
 .pulse-dot { animation: pulse 1.4s ease-in-out infinite; }
 @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1) } 50% { opacity: .35; transform: scale(.8) } }
 .fade-in { animation: fadeIn .35s ease both; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(4px) } to { opacity: 1; transform: none } }
-.tbl th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #8b8ba3; text-align: left; padding: 8px 10px; position: sticky; top: 0; background: #0c0c14; z-index: 1; }
-.tbl td { padding: 9px 10px; border-top: 1px solid rgba(255,255,255,.05); font-size: 13px; vertical-align: top; }
-.tbl tr:hover td { background: rgba(255,255,255,.02); }
+
+/* dense spreadsheet surface */
+.tbl th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #84848c; text-align: left; padding: 9px 12px; position: sticky; top: 0; background: #fbfaf8; z-index: 1; border-bottom: 1px solid #ebe9e4; }
+.tbl td { padding: 10px 12px; border-top: 1px solid #f0eee9; font-size: 13px; vertical-align: top; }
+.tbl tr:hover td { background: #faf9f6; }
+
 textarea, input, select { outline: none; }
-.input { width: 100%; background: #0c0c14; border: 1px solid rgba(255,255,255,.09); border-radius: 10px; padding: 9px 12px; font-size: 14px; color: #e7e7ef; transition: border-color .15s; }
-.input:focus { border-color: rgba(245,158,11,.6); box-shadow: 0 0 0 3px rgba(245,158,11,.12); }
-.label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #8b8ba3; margin-bottom: 6px; display: block; }
-.md strong { color: #fff; font-weight: 600; }
+.input { width: 100%; background: #ffffff; border: 1px solid #e2e0da; border-radius: 8px; padding: 9px 12px; font-size: 14px; color: #0d0d0e; transition: border-color .15s, box-shadow .15s; }
+.input::placeholder { color: #a5a5ac; }
+.input:focus { border-color: #2f5bea; box-shadow: 0 0 0 3px rgba(47,91,234,.12); }
+.label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #84848c; margin-bottom: 6px; display: block; }
+.md strong { color: #0d0d0e; font-weight: 600; }
+
+/* the 3D graph stays a dark "media" panel, like a hero video on a paper page */
+.graph-stage { background: #07070c; }
+.graph-stage .glass { background: rgba(255,255,255,.94); }

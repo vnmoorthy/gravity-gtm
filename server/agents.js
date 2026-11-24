@@ -3,18 +3,18 @@
 import { state, save, emit, uid, now } from "./store.js";
 
 export const AGENTS = {
-  planner: { name: "Planner", role: "Planner / Architect", color: "#f59e0b", emoji: "🧭", desc: "Parses intake, sets GTM milestones, allocates tasks" },
-  strategist: { name: "Strategist", role: "Builder · ICP", color: "#a78bfa", emoji: "🎯", desc: "Infers & expands the ICP with confidence scores" },
-  scout: { name: "Scout", role: "Builder · Discovery", color: "#22d3ee", emoji: "🛰️", desc: "Finds accounts & buyers grounded in public evidence" },
-  analyst: { name: "Analyst", role: "Builder · Competitive", color: "#fb7185", emoji: "⚔️", desc: "Maps direct / indirect / alternative competitors" },
-  cartographer: { name: "Cartographer", role: "Builder · Graph", color: "#818cf8", emoji: "🕸️", desc: "Mutates the knowledge graph, runs multi-hop queries" },
-  enricher: { name: "Enricher", role: "Builder · Enrichment", color: "#34d399", emoji: "🧬", desc: "Email/MX/LinkedIn waterfall with confidence" },
-  writer: { name: "Writer", role: "Builder · Outreach", color: "#f472b6", emoji: "✍️", desc: "Signal-personalised multi-touch sequences, A/B variants" },
-  reviewer: { name: "Reviewer", role: "Reviewer", color: "#facc15", emoji: "🔎", desc: "Fact-checks every claim against cited sources" },
-  twin: { name: "Buyer Twin", role: "Reviewer · Simulation", color: "#2dd4bf", emoji: "🪞", desc: "Role-plays the persona to predict reply odds" },
-  sentinel: { name: "Sentinel", role: "Security Agent", color: "#ef4444", emoji: "🛡️", desc: "Scans links, PII, prompt-injection in scraped data" },
-  governor: { name: "Governor", role: "Spend Governor", color: "#84cc16", emoji: "💳", desc: "Flexprice metering & credit gating" },
-  human: { name: "You", role: "Human-in-the-loop", color: "#e5e7eb", emoji: "🧑", desc: "Approves ICP, schema changes, and every send" },
+  planner: { name: "Planner", role: "Planner / Architect", color: "#d97706", emoji: "🧭", desc: "Parses intake, sets GTM milestones, allocates tasks" },
+  strategist: { name: "Strategist", role: "Builder · ICP", color: "#7c3aed", emoji: "🎯", desc: "Infers & expands the ICP with confidence scores" },
+  scout: { name: "Scout", role: "Builder · Discovery", color: "#0891b2", emoji: "🛰️", desc: "Finds accounts & buyers grounded in public evidence" },
+  analyst: { name: "Analyst", role: "Builder · Competitive", color: "#e11d48", emoji: "⚔️", desc: "Maps direct / indirect / alternative competitors" },
+  cartographer: { name: "Cartographer", role: "Builder · Graph", color: "#4f46e5", emoji: "🕸️", desc: "Mutates the knowledge graph, runs multi-hop queries" },
+  enricher: { name: "Enricher", role: "Builder · Enrichment", color: "#059669", emoji: "🧬", desc: "Email/MX/LinkedIn waterfall with confidence" },
+  writer: { name: "Writer", role: "Builder · Outreach", color: "#db2777", emoji: "✍️", desc: "Signal-personalised multi-touch sequences, A/B variants" },
+  reviewer: { name: "Reviewer", role: "Reviewer", color: "#ca8a04", emoji: "🔎", desc: "Fact-checks every claim against cited sources" },
+  twin: { name: "Buyer Twin", role: "Reviewer · Simulation", color: "#0d9488", emoji: "🪞", desc: "Role-plays the persona to predict reply odds" },
+  sentinel: { name: "Sentinel", role: "Security Agent", color: "#dc2626", emoji: "🛡️", desc: "Scans links, PII, prompt-injection in scraped data" },
+  governor: { name: "Governor", role: "Spend Governor", color: "#65a30d", emoji: "💳", desc: "Flexprice metering & credit gating" },
+  human: { name: "You", role: "Human-in-the-loop", color: "#2f5bea", emoji: "🧑", desc: "Approves ICP, schema changes, and every send" },
 };
 
 import { mirror } from "./band.js";

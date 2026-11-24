@@ -113,7 +113,7 @@ export default function Graph({ state, graphVersion, go }) {
   const counts = data.nodes.reduce((m, n) => ((m[n.label] = (m[n.label] || 0) + 1), m), {});
 
   return (
-    <div className="relative h-full" ref={wrap}>
+    <div className="relative h-full rounded-2xl overflow-hidden graph-stage border border-[#e2e0da]" ref={wrap}>
       <ForceGraph3D
         ref={fg}
         width={size.w}

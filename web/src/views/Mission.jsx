@@ -69,18 +69,18 @@ export default function Mission({ state, go }) {
 
   return (
     <div className="relative">
+      <div className="absolute inset-0 hairlines pointer-events-none" />
       <div className="absolute inset-x-0 top-0 h-[520px] orb pointer-events-none" />
-      <div className="absolute inset-x-0 top-0 h-[520px] grid-bg opacity-40 pointer-events-none [mask-image:linear-gradient(to_bottom,black,transparent)]" />
       <div className="relative max-w-6xl mx-auto px-8 pt-12 pb-16">
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-amber-300/90 border border-amber-500/25 bg-amber-500/5 rounded-full px-3 py-1 mb-5">Glass-box GTM · every claim cited · every send approved</div>
-          <h1 className="font-serif text-6xl md:text-7xl leading-[0.95] tracking-tight">From one sentence<br /><span className="italic text-amber-200">to booked meetings.</span></h1>
+        <div className="text-center mb-12 pt-6">
+          <div className="inline-flex items-center gap-2 text-[12px] text-zinc-400 border border-[#e2e0da] bg-[#ffffff] rounded-full px-3.5 py-1.5 mb-6"><span className="size-1.5 rounded-full bg-[#2f5bea]" />“Gravity is how founders grow pipeline without losing control.”</div>
+          <h1 className="font-serif text-6xl md:text-[80px] leading-[0.98]">The Revenue Engine<br /><span className="sub-ink">from one sentence to booked meetings.</span></h1>
           <p className="text-zinc-400 mt-5 max-w-2xl mx-auto">Describe what you sell. Eleven agents infer your ICP, find real accounts with live buying signals, map warm paths in a knowledge graph, verify contacts, and draft outreach you approve. Credits are metered by Flexprice the whole way.</p>
         </div>
 
         <Card className="p-6 glow-amber">
           <div className="flex items-center justify-between mb-4">
-            <div className="text-sm font-medium flex items-center gap-2"><Wand2 className="size-4 text-amber-300" />Product intake</div>
+            <div className="text-sm font-medium flex items-center gap-2"><Wand2 className="size-4 text-[#2f5bea]" />Product intake</div>
             <div className="flex gap-1.5">
               {SAMPLES.map((x) => <Button key={x.key} size="sm" variant="ghost" onClick={() => setF({ ...f, ...x, team: x.team })}>{x.label}</Button>)}
             </div>
@@ -138,7 +138,7 @@ export default function Mission({ state, go }) {
           <div className="grid md:grid-cols-4 gap-3 mt-3">
             {[["icp", "Review your ICP", "Confidence-scored, with expansion segments"], ["graph", "Explore the graph", "Warm paths & displacement plays"], ["outreach", "Approve outreach", "Nothing sends without you"], ["pipeline", "Work the pipeline", "AI vs rep attribution"]].map(([id, t, d]) => (
               <button key={id} onClick={() => go(id)} className={cx("glass rounded-2xl p-4 text-left hover:bg-white/[0.06] transition group")}>
-                <div className="text-sm font-medium group-hover:text-amber-200">{t} →</div>
+                <div className="text-sm font-medium group-hover:text-[#2f5bea]">{t} →</div>
                 <div className="text-xs text-zinc-500 mt-0.5">{d}</div>
               </button>
             ))}

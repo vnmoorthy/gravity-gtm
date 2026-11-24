@@ -10,13 +10,13 @@ export function Card({ className = "", children, ...p }) {
 
 export function Button({ children, variant = "default", size = "md", loading, className = "", icon: Icon, ...p }) {
   const v = {
-    primary: "bg-gradient-to-b from-amber-400 to-amber-600 text-black font-semibold hover:brightness-110 shadow-[0_8px_30px_-8px_rgba(245,158,11,.6)]",
-    default: "bg-white/[0.06] hover:bg-white/[0.1] text-zinc-100 border border-white/10",
+    primary: "bg-[#0d0d0e] !text-[#ffffff] font-medium hover:bg-[#26262a] shadow-[0_1px_0_rgba(0,0,0,.04)]",
+    default: "bg-[#ffffff] hover:bg-[#f7f6f3] text-zinc-100 border border-[#e2e0da]",
     ghost: "hover:bg-white/[0.06] text-zinc-300",
     danger: "bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30",
     success: "bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30",
   }[variant];
-  const s = { sm: "h-7 px-2.5 text-xs rounded-lg gap-1.5", md: "h-9 px-3.5 text-sm rounded-xl gap-2", lg: "h-12 px-6 text-base rounded-2xl gap-2.5" }[size];
+  const s = { sm: "h-7 px-2.5 text-xs rounded-md gap-1.5", md: "h-9 px-3.5 text-sm rounded-md gap-2", lg: "h-12 px-7 text-[15px] rounded-md gap-2.5" }[size];
   return (
     <button className={cx("inline-flex items-center justify-center transition disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap", v, s, className)} disabled={loading || p.disabled} {...p}>
       {loading ? <Loader2 className="size-4 animate-spin" /> : Icon ? <Icon className={size === "sm" ? "size-3.5" : "size-4"} /> : null}
@@ -50,7 +50,7 @@ export function Score({ value = 0, size = 34 }) {
   return (
     <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
-        <circle cx={size / 2} cy={size / 2} r={r} stroke="rgba(255,255,255,.08)" strokeWidth="3" fill="none" />
+        <circle cx={size / 2} cy={size / 2} r={r} stroke="rgba(0,0,0,.08)" strokeWidth="3" fill="none" />
         <circle cx={size / 2} cy={size / 2} r={r} stroke={col} strokeWidth="3" fill="none" strokeDasharray={c} strokeDashoffset={c * (1 - v / 100)} strokeLinecap="round" style={{ transition: "stroke-dashoffset .8s" }} />
       </svg>
       <span className="absolute text-[11px] font-semibold tabular-nums">{Math.round(v)}</span>
@@ -102,8 +102,8 @@ export function SectionTitle({ eyebrow, title, children, right }) {
   return (
     <div className="flex items-end justify-between gap-4 mb-5">
       <div>
-        {eyebrow && <div className="text-[11px] uppercase tracking-[0.18em] text-amber-400/80 mb-1.5">{eyebrow}</div>}
-        <h1 className="font-serif text-4xl leading-none tracking-tight">{title}</h1>
+        {eyebrow && <div className="text-[11px] uppercase tracking-[0.18em] text-[#2f5bea] mb-2">{eyebrow}</div>}
+        <h1 className="font-serif text-[40px] leading-none">{title}</h1>
         {children && <p className="text-sm text-zinc-400 mt-2 max-w-2xl">{children}</p>}
       </div>
       {right && <div className="flex items-center gap-2 flex-wrap justify-end">{right}</div>}
@@ -125,7 +125,7 @@ export function ToastProvider({ children }) {
       {children}
       <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 items-center">
         {items.map((t) => (
-          <div key={t.id} className={cx("fade-in px-4 py-2.5 rounded-xl text-sm border shadow-2xl backdrop-blur-xl", t.kind === "error" ? "bg-rose-950/80 border-rose-500/40 text-rose-200" : "bg-ink-800/90 border-white/10 text-zinc-100")}>{t.text}</div>
+          <div key={t.id} className={cx("fade-in px-4 py-2.5 rounded-xl text-sm border shadow-2xl backdrop-blur-xl", t.kind === "error" ? "bg-[#fff1f2] border-rose-500/40 text-rose-300" : "bg-[#0d0d0e] border-[#0d0d0e] !text-[#ffffff]")}>{t.text}</div>
         ))}
       </div>
     </ToastCtx.Provider>
@@ -149,7 +149,7 @@ export function Md({ text }) {
   const parts = String(text || "").split(/(\*\*[^*]+\*\*|@[A-Za-z][\w ]*?(?=[\s,.:;!?]|$))/g);
   return (
     <span className="md">
-      {parts.map((p, i) => p.startsWith("**") ? <strong key={i}>{p.slice(2, -2)}</strong> : p.startsWith("@") ? <span key={i} className="text-amber-300 font-medium">{p}</span> : p)}
+      {parts.map((p, i) => p.startsWith("**") ? <strong key={i}>{p.slice(2, -2)}</strong> : p.startsWith("@") ? <span key={i} className="text-[#2f5bea] font-medium">{p}</span> : p)}
     </span>
   );
 }

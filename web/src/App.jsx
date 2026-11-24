@@ -75,7 +75,7 @@ function ThinkingFeed({ state, onOpen }) {
   return (
     <aside className="w-[340px] shrink-0 border-l border-white/5 bg-ink-900/60 flex flex-col min-h-0">
       <div className="px-4 h-14 flex items-center justify-between border-b border-white/5">
-        <div className="flex items-center gap-2"><Sparkles className="size-4 text-amber-300" /><span className="text-sm font-medium">Agent Thinking</span>{state?.running && <span className="size-1.5 rounded-full bg-amber-400 pulse-dot" />}</div>
+        <div className="flex items-center gap-2"><Sparkles className="size-4 text-[#2f5bea]" /><span className="text-sm font-medium">Agent Thinking</span>{state?.running && <span className="size-1.5 rounded-full bg-amber-400 pulse-dot" />}</div>
         <button onClick={onOpen} className="text-[11px] text-zinc-400 hover:text-white">Open war room →</button>
       </div>
       <div ref={ref} className="flex-1 overflow-y-auto px-3 py-3 space-y-2.5">
@@ -119,7 +119,7 @@ export default function App() {
           <div className="h-14 px-4 flex items-center gap-2.5 border-b border-white/5">
             <img src="/favicon.svg" className="size-7" alt="" />
             <div>
-              <div className="font-semibold tracking-[0.2em] text-[13px]">GRAVITY</div>
+              <div className="font-semibold tracking-[0.22em] text-[13px]">✦ GRAVITY</div>
               <div className="text-[10px] text-zinc-500 -mt-0.5">self-driving GTM engine</div>
             </div>
           </div>
@@ -127,10 +127,10 @@ export default function App() {
             {NAV.map((n) => {
               const badge = n.id === "outreach" ? pending : n.id === "warroom" ? hitl : n.id === "accounts" ? state?.accounts?.filter((a) => a.status !== "filtered").length : 0;
               return (
-                <button key={n.id} onClick={() => setView(n.id)} className={cx("w-full flex items-center gap-2.5 px-3 h-9 rounded-xl text-[13px] transition", view === n.id ? "bg-white/[0.07] text-white" : "text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.03]")}>
-                  <n.icon className={cx("size-4", view === n.id && "text-amber-300")} />
+                <button key={n.id} onClick={() => setView(n.id)} className={cx("w-full flex items-center gap-2.5 px-3 h-9 rounded-md text-[13px] transition", view === n.id ? "bg-[#ffffff] text-white border border-[#e6e4de] shadow-[0_1px_2px_rgba(0,0,0,.04)]" : "text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.03] border border-transparent")}>
+                  <n.icon className={cx("size-4", view === n.id && "text-[#2f5bea]")} />
                   <span className="flex-1 text-left">{n.label}</span>
-                  {badge ? <span className={cx("text-[10px] px-1.5 rounded-md tabular-nums", n.id === "outreach" || n.id === "warroom" ? "bg-amber-500/20 text-amber-300" : "bg-white/10 text-zinc-300")}>{badge}</span> : null}
+                  {badge ? <span className={cx("text-[10px] px-1.5 rounded-md tabular-nums", n.id === "outreach" || n.id === "warroom" ? "bg-[#2f5bea] !text-[#ffffff]" : "bg-white/10 text-zinc-300")}>{badge}</span> : null}
                 </button>
               );
             })}
@@ -145,7 +145,7 @@ export default function App() {
         <div className="flex-1 flex flex-col min-w-0">
           <header className="h-14 shrink-0 border-b border-white/5 flex items-center justify-between px-5 gap-4 bg-ink-900/40">
             <div className="flex items-center gap-4 min-w-0">
-              <span className={cx("text-[10px] font-semibold tracking-wider px-2 py-1 rounded-md border", integ.mode === "live" ? "border-emerald-500/40 text-emerald-300 bg-emerald-500/10" : "border-amber-500/40 text-amber-300 bg-amber-500/10")}>{integ.mode === "live" ? "● LIVE" : "◐ DEMO DATA"}</span>
+              <span className={cx("text-[10px] font-semibold tracking-wider px-2 py-1 rounded-md border", integ.mode === "live" ? "border-emerald-500/40 text-emerald-300 bg-emerald-500/10" : "border-[#e2e0da] text-zinc-400 bg-[#ffffff]")}>{integ.mode === "live" ? "● LIVE" : "◐ DEMO DATA"}</span>
               {state?.product && <span className="text-sm text-zinc-300 truncate">Mission: <span className="text-white font-medium">{state.product.name}</span></span>}
               <RunTracker run={state?.run} />
             </div>
@@ -160,7 +160,7 @@ export default function App() {
             </div>
           </header>
           <div className="flex-1 flex min-h-0">
-            <main className={cx("flex-1 min-w-0", view === "graph" ? "overflow-hidden" : "overflow-y-auto")}>
+            <main className={cx("flex-1 min-w-0", view === "graph" ? "overflow-hidden p-3" : "overflow-y-auto")}>
               {state ? <V {...props} /> : <div className="p-10 text-zinc-500">Connecting to Gravity…</div>}
             </main>
             {feed && <ThinkingFeed state={state} onOpen={() => setView("warroom")} />}
