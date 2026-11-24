@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import ForceGraph3D from "react-force-graph-3d";
 import SpriteText from "three-spritetext";
 import * as THREE from "three";
-import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { Network, Route, Briefcase, Swords, Play, X, Database, Code2 } from "lucide-react";
 import { api } from "../api";
 import { Button, Badge, cx, useAction, Empty } from "../ui";
@@ -43,12 +42,10 @@ export default function Graph({ state, graphVersion, go }) {
 
   const bloomed = useRef(false);
   const fitted = useRef(false);
+
   useEffect(() => {
     const f = fg.current;
     if (!f) return;
-    if (!bloomed.current && f.postProcessingComposer) {
-      try { f.postProcessingComposer().addPass(new UnrealBloomPass(new THREE.Vector2(size.w, size.h), 1.15, 0.6, 0.08)); bloomed.current = true; } catch { /* bloom optional */ }
-    }
     f.d3Force("charge")?.strength(-90);
     f.d3Force("link")?.distance((l) => (l.type === "has_signal" ? 18 : l.type === "works_at" ? 26 : 48));
   }, [data.nodes.length]);
@@ -67,8 +64,9 @@ export default function Graph({ state, graphVersion, go }) {
     const lit = hl.nodes.size === 0 || hl.nodes.has(n.id);
     const mat = new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: lit ? 0.95 : 0.12 });
     group.add(new THREE.Mesh(new THREE.SphereGeometry(r, 20, 20), mat));
-    const halo = new THREE.Mesh(new THREE.SphereGeometry(r * 1.9, 16, 16), new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: lit ? 0.12 : 0.02, depthWrite: false }));
-    group.add(halo);
+    for (const [k, o] of [[1.6, 0.22], [2.4, 0.09], [3.6, 0.04]]) {
+      group.add(new THREE.Mesh(new THREE.SphereGeometry(r * k, 16, 16), new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: lit ? o : o / 6, depthWrite: false, blending: THREE.AdditiveBlending })));
+    }
     if (n.label !== "Signal" && (lit || n.label === "Product")) {
       const t = new SpriteText(n.name?.length > 26 ? n.name.slice(0, 25) + "…" : n.name || "");
       t.color = lit ? "#e5e7eb" : "#52525b";
