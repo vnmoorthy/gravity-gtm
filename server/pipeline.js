@@ -146,7 +146,12 @@ export async function discover(opts = {}) {
     const half = Math.ceil(n / 2);
     const focuses = [inds.slice(0, 2).join(" / ") || "core ICP", (state.expansions.find((e) => e.status === "accepted")?.segment) || inds.slice(2).join(" / ") || "fast-growing companies in the ICP with recent funding or leadership change"];
     say("scout", `Launching 2 parallel search sweeps: “${focuses[0]}” and “${focuses[1]}”. Every claim must carry a source URL.`, { kind: "thought" });
-    const results = await Promise.allSettled(focuses.map((f, i) => scoutBatch(icp, product, f, i === 0 ? half : n - half, exclude)));
+    const sweep = async (f, k) => {
+      let r = await scoutBatch(icp, product, f, k, exclude);
+      if (!r.json?.companies?.length) { track("scout", r); say("scout", `Sweep “${f}” came back empty — retrying with a broader query.`, { kind: "thought" }); r = await scoutBatch(icp, product, `${f} (any US/Canada mid-market company with a recent funding, leadership or hiring signal)`, k, exclude); }
+      return r;
+    };
+    const results = await Promise.allSettled(focuses.map((f, i) => sweep(f, i === 0 ? half : n - half)));
     for (const res of results) {
       if (res.status !== "fulfilled") { say("scout", `A sweep failed: ${res.reason?.message}`, { kind: "error" }); continue; }
       const r = res.value;
@@ -191,6 +196,7 @@ export async function discover(opts = {}) {
     if (a.status !== "filtered") kept++;
     emit("accounts", { accounts: state.accounts, people: state.people });
   }
+  if (hasLLM()) await findMissingBuyers(retrieved);
   publishRocket();
   say("scout", `RocketRide pipeline normalised & classified signals for ${companies.length} accounts (${state.integrations.rocketride?.engine || "local"}).`, { kind: "thought" });
   say("scout", `Citation gate: kept ${kept} accounts, dropped ${dropped} (no verifiable source or negative signal). ${state.people.length} named buyers on file.`, { to: ["cartographer"], kind: "handoff" });
@@ -200,6 +206,34 @@ export async function discover(opts = {}) {
   await graphPass();
   save();
   return { kept, dropped };
+}
+
+// Buyer finder: focused, cited search for decision-makers at accounts where the sweep named none.
+async function findMissingBuyers(retrievedAll) {
+  const icp = state.icp;
+  const targets = state.accounts.filter((a) => a.status !== "filtered" && !state.people.some((p) => p.accountId === a.id)).slice(0, 6);
+  if (!targets.length) return;
+  say("scout", `Buyer finder: searching for named ${icp.personas.slice(0, 2).map((p) => p.title).join(" / ")} at ${targets.length} accounts with no decision-maker on file.`, { kind: "thought" });
+  await Promise.all(targets.map(async (a) => {
+    try {
+      const r = await ask({
+        system: SYSTEM, effort: "low", web: true, maxUses: 3,
+        prompt: `Find 1-2 real, currently-serving decision-makers at ${a.name} (${a.domain}) whose role matches one of: ${icp.personas.map((p) => p.title).join("; ")} (or the closest finance/operations/revenue leader). Use web search: leadership/team pages, press releases, news, conference bios. Only include a person if a retrieved public page names them in that role.
+Return JSON: {"buyers":[{"name": str, "title": str, "linkedin_url": str|null, "source_url": str, "prior_companies":[str], "schools":[str]}]}`,
+      });
+      track("scout", r);
+      const urls = new Set(r.sources.map((x) => x.url));
+      const hosts = new Set(r.sources.map((x) => host(x.url)));
+      for (const b of r.json?.buyers || []) {
+        if (!b?.name || !b.source_url) continue;
+        state.people.push({ id: uid("per"), name: b.name, title: b.title, accountId: a.id, linkedin: b.linkedin_url || null, source: b.source_url, source_verified: urls.has(b.source_url) || hosts.has(host(b.source_url)), prior_companies: b.prior_companies || [], schools: b.schools || [], email: null, email_status: "pending" });
+        a.buyerCount = (a.buyerCount || 0) + 1;
+      }
+      Object.assign(a, scoreAccount(a, icp));
+    } catch (e) { say("scout", `Buyer finder failed for ${a.name}: ${e.message}`, { kind: "error" }); }
+  }));
+  emit("accounts", { accounts: state.accounts, people: state.people });
+  say("scout", `Buyer finder added ${state.people.length} named decision-makers with sources.`, { to: ["enricher"], kind: "result" });
 }
 
 // ───────────────────────────── 3. COMPETITORS ─────────────────────────────

@@ -9,3 +9,5 @@ web/dist
 *.log
 .claude/
 deck/_build/
+deck/video/build/
+deck/video/Voiceover.mov
