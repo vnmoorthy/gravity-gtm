@@ -31,7 +31,7 @@ fl.append("".join(parts)+f"concat=n={len(parts)}:v=1:a=0,scale={W}:{H}:flags=lan
 if not os.path.exists("body.mp4"): sh(["ffmpeg","-y","-loglevel","error","-i",raw,"-filter_complex",";".join(fl),"-map","[v]","-c:v","libx264","-preset","veryfast","-crf","19","body.mp4"])
 # 2) intro: face full (0..8.0) then hero card (8.0..intake)
 I=C["intake"]; split=8.0
-if not os.path.exists("intro.mp4"): sh(["ffmpeg","-y","-loglevel","error","-ss","0","-t",f"{split}","-i","../Voiceover.mov","-loop","1","-t",f"{I-split}","-i","gfx/intro.png",
+if not os.path.exists("intro.mp4"): sh(["ffmpeg","-y","-loglevel","error","-ss","0","-t",f"{split}","-i","../Voiceover.mov","-i","gfx/intro.png",
  "-filter_complex",f"[0:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},fps={FPS},format=yuv420p,setsar=1[a];[1:v]scale={W}:{H},fps={FPS},format=yuv420p,setsar=1,zoompan=z='min(zoom+0.0007,1.05)':d={int((I-split)*FPS)}:s={W}x{H}:fps={FPS}[b];[a][b]concat=n=2:v=1:a=0[v]",
  "-map","[v]","-c:v","libx264","-preset","veryfast","-crf","19","intro.mp4"])
 O=C["end"]-C["outro"]
